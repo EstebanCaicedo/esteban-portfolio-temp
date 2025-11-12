@@ -168,5 +168,23 @@
       "assets/videos/Third Mill Practice2.mp4"
     ],
     "model": "assets/models/Third Mill Practice.glb"
-  }
+  },
+  {
+  "title": "Machining Fixture",
+  "slug": "machining-fixture",
+  "description": "CNC machining fixture — concept, drawings, and interactive 3D model.",
+  "longDescription": "Design of a modular machining fixture focused on clamping strategy, datum definition, and tool clearance. Includes annotated drawings (PROJECT-1-001DRW…004DRW) and a clean GLB for real-time viewing.",
+  "tags": ["CAD", "Manufacturing", "3D"],
+  "images": [
+    "assets/images/Machining Fixture.jpg",
+    "assets/images/Machining Fixture1.jpg",
+    "assets/images/Machining Fixture2.jpg",
+    "assets/images/Machining Fixture3.jpg",
+    "assets/images/PROJECT-1-001DRW.jpg",
+    "assets/images/PROJECT-1-002DRW.jpg",
+    "assets/images/PROJECT-1-003DRW.jpg",
+    "assets/images/PROJECT-1-004DRW.jpg"
+  ],
+  "model": "assets/models/Machining Fixture.glb"
+}
 ]
