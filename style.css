@@ -1,37 +1,58 @@
-:root{--bg:#0b1220;--ink:#e6e9f5;--mut:#9aa3b2;--brand:#4f6af3;--card:#151b2b;--panel:#0f1626}
-*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial}
-a{color:#aeb9ff;text-decoration:none}a:hover{opacity:.9}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:rgba(0,0,0,.25);position:sticky;top:0;backdrop-filter:blur(8px);z-index:2}
-.topbar .brand{font-weight:700}.topbar nav a{margin-left:16px;color:var(--ink);opacity:.9}
-.container{max-width:1100px;margin:24px auto;padding:0 16px}
-h1{margin:6px 0 4px}.sub{color:var(--mut);margin:0 0 20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
-.card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.slider{position:relative;aspect-ratio:16/10;background:#121827}
-.slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
-.slider img.active{opacity:1}
-.slider .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);border:0;color:#fff;font-size:20px;width:32px;height:32px;border-radius:8px;cursor:pointer}
-.slider .left{left:8px}.slider .right{right:8px}
-.slider .dots{position:absolute;bottom:8px;width:100%;display:flex;justify-content:center;gap:6px}
-.slider .dots span{width:8px;height:8px;border-radius:50%;background:#647096;opacity:.6}
-.slider .dots span.on{opacity:1;background:#c8d0ff}
-.card .meta{padding:14px}
-.card .meta h3{margin:0 0 6px}
-.tags span{display:inline-block;background:#2a3350;color:#dbe2ff;border:1px solid rgba(255,255,255,.08);padding:2px 8px;border-radius:999px;margin-right:6px;margin-top:6px;font-size:.8rem}
-.btn{display:inline-block;margin-top:10px;background:var(--brand);color:#fff;padding:8px 12px;border-radius:10px}
-.footer{color:#9aa3b2;text-align:center;padding:30px 12px;border-top:1px solid rgba(255,255,255,.05);margin-top:30px}
+/* ==== Theme (igual look & feel v2.6.0) ==== */
+:root{
+  --bg:#0b1220;
+  --card:#151b2b;
+  --ink:#e6e9f5;
+  --muted:#9aa3b2;
+  --brand:#4f6af3;
+  --brand-dim:#4058ca;
+  --ring:rgba(255,255,255,.08);
+}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial}
+a{color:inherit;text-decoration:none}
 
-.detail{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.viewerCol{}
-.mediaCol .big{aspect-ratio:auto;min-height:320px;background:#121827;border-radius:12px;position:relative;overflow:hidden;padding:0}
-.mediaCol .big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
-.mediaCol .big img.active{opacity:1}
-.mediaCol .big video{width:100%;display:block;background:#000}
-.mediaCol .big .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);border:0;color:#fff;font-size:20px;width:32px;height:32px;border-radius:8px;cursor:pointer}
-.mediaCol .big .left{left:8px}.mediaCol .big .right{right:8px}
-.mediaCol .big .dots{position:absolute;bottom:8px;width:100%;display:flex;justify-content:center;gap:6px}
-.mediaCol .big .dots span{width:8px;height:8px;border-radius:50%;background:#647096;opacity:.6}
-.mediaCol .big .dots span.on{opacity:1;background:#c8d0ff}
-.empty{display:flex;align-items:center;justify-content:center;min-height:520px;background:#121827;border-radius:12px;color:#8fa0c6;border:1px dashed #2a3350}
+/* Layout util */
+.container{max-width:1200px;margin:0 auto;padding:32px 20px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
 
-@media (max-width:940px){.detail{grid-template-columns:1fr}}
+.card{background:color-mix(in srgb,var(--card) 70%, black 0%);border:1px solid var(--ring);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.card-body{padding:24px}
+.h3{font-size:20px;font-weight:600;margin:0 0 10px}
+.p-sm{font-size:14px;color:color-mix(in srgb,var(--ink) 70%, black 0%);margin:0 0 16px}
+
+/* Chips & button */
+.chip{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--ring);font-size:12px}
+.btn{display:inline-block;background:var(--brand);color:white;padding:10px 16px;border-radius:12px;border:0;font-weight:600}
+.btn:hover{background:var(--brand-dim)}
+
+/* ===== Slider (imagenes + videos) ===== */
+.slider{position:relative;overflow:hidden;border-bottom:1px solid var(--ring);background:rgba(255,255,255,.02)}
+.slide-layer{position:absolute;inset:0;opacity:0;transition:opacity .6s ease-in-out}
+.slide-layer.active{opacity:1}
+.slide-layer img,
+.slide-layer video{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Controles */
+.ctrl{position:absolute;top:50%;transform:translateY(-50%);z-index:3;background:rgba(0,0,0,.45);color:#fff;border-radius:10px;border:1px solid rgba(255,255,255,.1);width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+.ctrl.left{left:12px}
+.ctrl.right{right:12px}
+.slider:hover .ctrl{opacity:1}
+
+/* Dots */
+.dots{position:absolute;left:0;right:0;bottom:14px;display:flex;gap:8px;justify-content:center;z-index:3}
+.dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35)}
+.dot.active{background:#fff}
+
+/* Header simple */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.nav a{opacity:.9}
+.nav a:hover{opacity:1}
+
+/* Project page layout */
+.detail{display:grid;grid-template-columns:1.1fr .9fr;gap:28px}
+@media(max-width:960px){.detail{grid-template-columns:1fr;}}
+.viewer{background:rgba(255,255,255,.03);border-radius:18px;border:1px solid var(--ring);height:520px;display:flex;align-items:center;justify-content:center}
+.viewer canvas{width:100%;height:100%}
