@@ -2,13 +2,9 @@
   {
     "title": "Airplane Model",
     "slug": "airplane-model",
-    "description": "Concept single-engine light aircraft model \u2014 interactive 3D viewer and renders.",
-    "longDescription": "WIP \u2014 Detailed description to be added (design intent, constraints, mating strategy, mass properties, and manufacturing considerations).",
-    "tags": [
-      "CAD",
-      "Assembly",
-      "3D"
-    ],
+    "description": "Concept single-engine light aircraft model — interactive 3D viewer and renders.",
+    "longDescription": "WIP — Detailed description to be added (design intent, constraints, mating strategy, mass properties, and manufacturing considerations).",
+    "tags": ["CAD", "Assembly", "3D"],
     "images": [
       "assets/images/Airplane Model1.jpg",
       "assets/images/Airplane Model2.jpg",
@@ -17,15 +13,11 @@
     "model": "assets/models/AIR_PLANE_CLEAN.glb"
   },
   {
-    "title": "Antonov AN-10 \u2014 Surfaces-001",
+    "title": "Antonov AN-10 — Surfaces-001",
     "slug": "antonov-an10",
-    "description": "Surface-model practice: AN-10 transport aircraft \u2014 clean topology and renders.",
+    "description": "Surface-model practice: AN-10 transport aircraft — clean topology and renders.",
     "longDescription": "First pass at the Antonov AN-10 using a surface-driven workflow (lofted skins, guide curves, and continuity checks).",
-    "tags": [
-      "CAD",
-      "Surfaces",
-      "3D"
-    ],
+    "tags": ["CAD", "Surfaces", "3D"],
     "images": [
       "assets/images/Antonov1.jpg",
       "assets/images/Antonov2.jpg",
