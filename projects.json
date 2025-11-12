@@ -64,5 +64,16 @@
       "assets/videos/First Lathe Project.mp4"
     ],
     "model": "assets/models/First Lathe Project.glb"
-  }
+  },
+  {
+  "title": "First Lathe Project",
+  "slug": "first-lathe-project",
+  "description": "Intro lathe practice — basic turning ops with single video and 3D model viewer.",
+  "longDescription": "Short lathe practice focused on facing, turning and chamfering. Includes a GLB viewer and one process video.",
+  "tags": ["CAD", "Manufacturing", "3D"],
+  "images": [
+    "assets/videos/First Lathe Project.mp4"
+  ],
+  "model": "assets/models/First Lathe Project.glb"
+}
 ]
