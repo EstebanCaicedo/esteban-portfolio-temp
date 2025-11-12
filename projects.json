@@ -93,7 +93,8 @@
     "longDescription": "Conceptual design of a retractable aircraft landing gear. Includes motion study, linkage analysis, and kinematic simulation for extension and retraction phases. Features 3D model visualization and demonstration video.",
     "tags": ["CAD", "Assembly", "3D"],
     "videos": [
-      "assets/videos/Landing_Gear_Video.mp4"
+      "assets/videos/Landing_Gear_forward.mp4",
+      "assets/videos/Landing_Gear_reverse.mp4"
     ],
     "model": "assets/models/Landing Gear.glb"
   },
@@ -127,7 +128,8 @@
     "longDescription": "Detailed modeling of a nose landing gear mechanism, featuring retractable kinematics and motion path verification. Includes an interactive 3D model and animation demonstrating the full extension and retraction cycle.",
     "tags": ["CAD", "Assembly", "3D"],
     "videos": [
-      "assets/videos/Nose_Landing_Gear.mp4"
+      "assets/videos/Nose_Landing_Gear_forward.mp4",
+      "assets/videos/Nose_Landing_Gear_reverse.mp4"
     ],
     "model": "assets/models/NOSE_LANDING_GEAR-504.glb"
   },
