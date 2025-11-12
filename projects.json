@@ -49,5 +49,122 @@
     "assets/videos/First Lathe Project.mp4"
   ],
   "model": "assets/models/First Lathe Project.glb"
-}
+},
+  {
+  "title": "First Mill Practice",
+  "slug": "first-mill-practice",
+  "description": "CNC mill practice — facing, pocketing, contour; two videos + 3D model.",
+  "longDescription": "Practice part for 3-axis milling. Toolpaths include facing, pocketing and contouring; roughing and finishing strategies. Includes real-time model viewer.",
+  "tags": ["CAD", "Manufacturing", "3D"],
+  "images": [
+    "assets/videos/First Mill Practice1.mp4",
+    "assets/videos/First Mill Practice2.mp4"
+  ],
+  "model": "assets/models/First Mill Practice.glb"
+},
+{
+  "title": "First Sheetmetal Practice",
+  "slug": "first-sheetmetal-practice",
+  "description": "Introductory sheet metal design — bend operations, flat pattern and 3D viewer.",
+  "longDescription": "Basic sheet metal exercise focused on flange creation, bend allowance, and unfolding operations. Demonstrates design-for-manufacturing principles and flat pattern generation.",
+  "tags": ["CAD", "Sheetmetal", "3D"],
+  "images": [
+    "assets/images/First Sheetmetal Practice.jpg",
+    "assets/images/First Sheetmetal Practice1.jpg",
+    "assets/images/First Sheetmetal Practice2.jpg"
+  ],
+  "model": "assets/models/First Sheetmetal Practice.glb"
+},
+{
+  "title": "Fourth Mill Practice",
+  "slug": "fourth-mill-practice",
+  "description": "CNC milling practice — adaptive toolpaths and finishing strategies with 3D viewer.",
+  "longDescription": "Fourth CNC milling exercise focusing on adaptive clearing and precision finishing operations. Demonstrates proper machining sequence planning and surface optimization in a 3-axis environment.",
+  "tags": ["CAD", "Manufacturing", "3D"],
+  "images": [
+    "assets/videos/Fourth Mill Practice.mp4"
+  ],
+  "model": "assets/models/Fourth Mill Practice.glb"
+},
+{
+  "title": "Landing Gear",
+  "slug": "landing-gear",
+  "description": "Aircraft landing gear assembly — animation and 3D interactive model.",
+  "longDescription": "Conceptual design of a retractable aircraft landing gear. Includes motion study, linkage analysis, and kinematic simulation for extension and retraction phases. Features 3D model visualization and demonstration video.",
+  "tags": ["CAD", "Assembly", "3D"],
+  "images": [
+    "assets/videos/Landing_Gear_Video.mp4"
+  ],
+  "model": "assets/models/Landing Gear.glb"
+},
+{
+  "title": "Linkage",
+  "slug": "linkage",
+  "description": "Mechanical linkage simulation — motion constraints and kinematic behavior.",
+  "longDescription": "This project explores a four-bar mechanical linkage design, demonstrating motion constraints, kinematic analysis, and CAD assembly practices. Includes static geometry visualization and interactive 3D model viewer.",
+  "tags": ["CAD", "Mechanisms", "3D"],
+  "images": [
+    "assets/images/Linkage1.png",
+    "assets/images/Linkage2.png"
+  ],
+  "model": "assets/models/Linkage.glb"
+},
+{
+  "title": "Mouse",
+  "slug": "mouse",
+  "description": "Ergonomic computer mouse concept — CAD modeling and surface detailing.",
+  "longDescription": "Concept design for an ergonomic computer mouse focusing on comfort, curvature flow, and manufacturable surfaces. The 3D model highlights smooth topology transitions and component separation suitable for prototype casing fabrication.",
+  "tags": ["CAD", "Surfaces", "3D"],
+  "images": [
+    "assets/images/Mouse.png"
+  ],
+  "model": "assets/models/MOUSE.glb"
+},
+{
+  "title": "Nose Landing Gear",
+  "slug": "nose-landing-gear",
+  "description": "Nose landing gear system — kinematic design and motion analysis.",
+  "longDescription": "Detailed modeling of a nose landing gear mechanism, featuring retractable kinematics and motion path verification. Includes an interactive 3D model and animation demonstrating the full extension and retraction cycle.",
+  "tags": ["CAD", "Assembly", "3D"],
+  "images": [
+    "assets/videos/Nose_Landing_Gear.mp4"
+  ],
+  "model": "assets/models/NOSE_LANDING_GEAR-504.glb"
+},
+{
+  "title": "Second Mill Practice",
+  "slug": "second-mill-practice",
+  "description": "CNC milling practice — multi-axis contouring and precision surface finishing.",
+  "longDescription": "Intermediate CNC milling operation using a 3-axis machine setup. Focused on precision contouring, adaptive clearing, and surface finishing strategies. Includes interactive 3D model and a demonstration video of the machining process.",
+  "tags": ["CAD", "Manufacturing", "3D"],
+  "images": [
+    "assets/videos/Second Mill Practice.mp4"
+  ],
+  "model": "assets/models/Second Mill Pracice.glb"
+},
+{
+  "title": "Second Sheetmetal Practice",
+  "slug": "second-sheetmetal-practice",
+  "description": "Sheet metal modeling practice — flange, hem, and forming operations.",
+  "longDescription": "Advanced sheet metal modeling focused on flange creation, edge hems, and complex bends. Demonstrates accurate unfolding and material thickness control for manufacturable sheet metal parts. Includes multiple renders and interactive 3D visualization.",
+  "tags": ["CAD", "Manufacturing", "3D"],
+  "images": [
+    "assets/images/Second Sheetmetal Practice.jpg",
+    "assets/images/Second Sheetmetal Practice1.jpg",
+    "assets/images/Second Sheetmetal Practice2.jpg"
+  ],
+  "model": "assets/models/Second Sheetmetal Practice.glb"
+},
+{
+  "title": "Third Mill Practice",
+  "slug": "third-mill-practice",
+  "description": "CNC milling project — slotting, contouring, and drilling operations.",
+  "longDescription": "Comprehensive CNC milling exercise involving multiple operations such as pocketing, contouring, and hole drilling. Demonstrates precise toolpath strategy setup and work coordinate system alignment. Includes interactive 3D model and machining videos.",
+  "tags": ["CAD", "Manufacturing", "3D"],
+  "images": [
+    "assets/videos/Third Mill Practice1.mp4",
+    "assets/videos/Third Mill Practice2.mp4"
+  ],
+  "model": "assets/models/Third Mill Practice.glb"
+},
 ]
