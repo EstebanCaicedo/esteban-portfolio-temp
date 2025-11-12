@@ -1,219 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Project</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header class="wrap" style="display:flex;justify-content:space-between;align-items:center;">
-    <a class="back" href="index.html">← Back</a>
-    <nav style="display:flex;gap:18px;">
-      <a href="index.html">Projects</a>
-      <a href="https://www.linkedin.com/in/esteban-caicedo/" target="_blank" rel="noopener">LinkedIn</a>
-    </nav>
-  </header>
-
-  <main class="proj">
-    <!-- LEFT: 3D VIEWER -->
-    <section class="viewer">
-      <canvas id="viewer3d"></canvas>
-    </section>
-
-    <!-- RIGHT: TEXT + SLIDER -->
-    <section class="right">
-      <h1 id="p-title">—</h1>
-      <p id="p-long">—</p>
-
-      <div class="slider" id="mediaSlider">
-        <!-- nav buttons -->
-        <button class="nav-btn left-3" id="btnPrev" aria-label="Previous">‹</button>
-        <button class="nav-btn right-3" id="btnNext" aria-label="Next">›</button>
-        <!-- media layers are injected here -->
+  <div class="container">
+    <div class="nav">
+      <a href="index.html">← Back</a>
+      <div style="display:flex;gap:18px">
+        <a href="index.html">Projects</a>
+        <a href="https://www.linkedin.com/in/esteban-caicedo/" target="_blank" rel="noreferrer">LinkedIn</a>
       </div>
-      <div class="track" id="dots"></div>
-    </section>
-  </main>
+    </div>
 
-  <footer class="wrap" style="text-align:center;color:#9aa3b2;padding:18px 0 30px;">
-    © 2025 Esteban Caicedo
-  </footer>
+    <div id="title" style="font-size:28px;font-weight:700;margin:8px 0 18px"></div>
 
-  <!-- Three.js + GLTFLoader (CDN) -->
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+    <div class="detail">
+      <!-- 3D viewer -->
+      <div class="viewer" id="viewer">
+        <!-- Si no se puede cargar el model, se mostrará un mensaje -->
+      </div>
+
+      <!-- description + gallery -->
+      <div>
+        <p id="long" class="p-sm" style="margin:6px 0 18px"></p>
+        <div id="gallery" class="slider" style="aspect-ratio:16/9"></div>
+      </div>
+    </div>
+  </div>
 
   <script>
-  (async function () {
-    // ---- Helpers ----
-    const qs = (sel, el=document) => el.querySelector(sel);
-
-    // 1) Read slug
-    const params = new URLSearchParams(location.search);
-    const slug = params.get('slug');
-    if (!slug) {
-      qs('#p-title').textContent = 'Project not found';
-      return;
+  // ====== same helpers as index ======
+  const isVideo=(src)=>/\.(mp4|webm|ogg)$/i.test(src);
+  function makeMediaEl(src){
+    if(isVideo(src)){const v=document.createElement('video');v.src=src;v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='metadata';v.setAttribute('disablepictureinpicture','');return v;}
+    const img=new Image();img.src=src;img.alt='';img.loading='lazy';return img;
+  }
+  function mountMediaSlider(container, mediaPaths, heightPx, opts){
+    opts=opts||{}; const autoplay=opts.autoplay!==false; const interval=opts.interval||3000;
+    container.classList.add('slider'); if(heightPx) container.style.height=heightPx+'px';
+    const a=document.createElement('div');a.className='slide-layer active';
+    const b=document.createElement('div');b.className='slide-layer';
+    let useA=true, idx=0, timer=null;
+    a.appendChild(makeMediaEl(mediaPaths[0]||'')); b.appendChild(makeMediaEl(mediaPaths[1]||mediaPaths[0]||'')); container.append(a,b);
+    const left=document.createElement('div'); left.className='ctrl left'; left.textContent='‹';
+    const right=document.createElement('div'); right.className='ctrl right'; right.textContent='›';
+    container.append(left,right);
+    let dots=null;
+    if(mediaPaths.length>1){
+      dots=document.createElement('div');dots.className='dots';
+      mediaPaths.forEach((_,i)=>{const d=document.createElement('span');d.className='dot'+(i===0?' active':'');d.onclick=()=>show(i);dots.appendChild(d);});
+      container.appendChild(dots);
     }
-
-    // 2) Load projects.json
-    let projects = [];
-    try {
-      const res = await fetch('projects.json', {cache:'no-store'});
-      projects = await res.json();
-    } catch (e) {
-      console.error('projects.json load error', e);
-      qs('#p-title').textContent = 'Error loading project list';
-      return;
+    function show(nextIndex){
+      idx=(nextIndex+mediaPaths.length)%mediaPaths.length;
+      const target=(useA?b:a); target.innerHTML=''; target.appendChild(makeMediaEl(mediaPaths[idx]||''));
+      (useA?a:b).classList.remove('active'); (useA?b:a).classList.add('active'); useA=!useA;
+      if(dots){dots.childNodes.forEach((d,i)=>d.className='dot'+(i===idx?' active':''));}
     }
+    left.onclick=()=>show(idx-1); right.onclick=()=>show(idx+1);
+    function start(){ if(autoplay && mediaPaths.length>1) timer=setInterval(()=>show(idx+1), interval); }
+    function stop(){ if(timer){clearInterval(timer); timer=null;} }
+    container.addEventListener('mouseenter',stop); container.addEventListener('mouseleave',start);
+    start();
+  }
 
-    const project = projects.find(p => p.slug === slug);
-    if (!project) {
-      qs('#p-title').textContent = 'Project not found';
-      return;
+  // ====== very light 3D viewer (model-viewer fallback-free) ======
+  // Usamos <model-viewer> si está disponible; si no, mostramos texto.
+  function mountModel(container, src) {
+    if (!src) { container.innerHTML='<div style="opacity:.7">No 3D model.</div>'; return; }
+
+    // Intento con <model-viewer> (si el browser lo soporta o ya lo tenías)
+    const tag = document.createElement('model-viewer');
+    tag.setAttribute('src', src);
+    tag.setAttribute('camera-controls','');
+    tag.setAttribute('auto-rotate','');
+    tag.setAttribute('exposure','1.0');
+    tag.style.width='100%'; tag.style.height='100%';
+    tag.addEventListener('error', ()=> { container.innerHTML='<div style="opacity:.7">Model preview not available.</div>'; });
+    container.innerHTML=''; container.appendChild(tag);
+
+    // Carga del script solo si no existe
+    if (!customElements.get('model-viewer')) {
+      const s=document.createElement('script');
+      s.type='module';
+      s.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
+      document.head.appendChild(s);
     }
+  }
 
-    // 3) Fill text
-    qs('#p-title').textContent = project.title || '—';
-    qs('#p-long').textContent  = project.longDescription || project.description || '—';
+  // ====== load & render ======
+  (async function(){
+    const params=new URLSearchParams(location.search);
+    const slug=params.get('slug');
 
-    // 4) Build media array (images + optional videos)
-    const media = [];
-    if (Array.isArray(project.images)) {
-      for (const img of project.images) media.push({type:'image', src: img});
-    }
-    if (Array.isArray(project.videos)) {
-      for (const v of project.videos) media.push({type:'video', src: v});
-    }
+    const res=await fetch('projects.json',{cache:'no-store'});
+    const list=await res.json();
+    const p=list.find(x=>x.slug===slug) || list[0];
 
-    // 5) MOUNT SLIDER
-    const slider = qs('#mediaSlider');
-    const dots   = qs('#dots');
-    let idx = 0;
-    let layers = [];
+    document.getElementById('title').textContent = p.title || 'Project';
+    document.getElementById('long').textContent  = p.longDescription || '';
 
-    function clearChildren(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+    // viewer
+    mountModel(document.getElementById('viewer'), p.model || '');
 
-    function renderSlider(){
-      clearChildren(slider);
-      // buttons already exist; just (re)append them after media layers
-      const btnPrev = qs('#btnPrev');
-      const btnNext = qs('#btnNext');
-
-      layers = media.map((m, i) => {
-        let el;
-        if (m.type === 'video') {
-          el = document.createElement('video');
-          el.src = m.src;
-          el.controls = true;
-          el.playsinline = true;
-        } else {
-          el = document.createElement('img');
-          el.src = m.src;
-          el.alt = project.title + ' ' + (i+1);
-          el.loading = 'lazy';
-        }
-        el.style.opacity = (i === idx ? '1' : '0');
-        slider.appendChild(el);
-        return el;
-      });
-
-      // Reattach buttons on top
-      slider.appendChild(btnPrev);
-      slider.appendChild(btnNext);
-
-      // dots
-      clearChildren(dots);
-      media.forEach((_, i) => {
-        const d = document.createElement('div');
-        d.className = 'dot' + (i === idx ? ' active' : '');
-        d.addEventListener('click', () => { idx = i; updateSlider(); });
-        dots.appendChild(d);
-      });
-    }
-
-    function updateSlider(){
-      layers.forEach((el, i) => el.style.opacity = (i === idx ? '1' : '0'));
-      [...dots.children].forEach((d,i)=> d.className = 'dot' + (i===idx?' active':''));
-    }
-
-    qs('#btnPrev').addEventListener('click', () => { if (!media.length) return; idx=(idx-1+media.length)%media.length; updateSlider(); });
-    qs('#btnNext').addEventListener('click', () => { if (!media.length) return; idx=(idx+1)%media.length; updateSlider(); });
-
-    renderSlider();
-
-    // 6) MOUNT 3D VIEWER (Three.js) if model exists
-    if (project.model) {
-      const canvas = qs('#viewer3d');
-      const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-      const viewer = qs('.viewer');
-      function fitRenderer(){
-        const w = viewer.clientWidth;
-        const h = viewer.clientHeight;
-        renderer.setSize(w, h, false);
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-      }
-
-      const scene = new THREE.Scene();
-      scene.background = null;
-
-      const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-      camera.position.set(2.2, 1.6, 3.2);
-
-      // light
-      scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-      const dir = new THREE.DirectionalLight(0xffffff, 0.9);
-      dir.position.set(3, 5, 4);
-      scene.add(dir);
-
-      // ground (soft shadow feel)
-      const g = new THREE.PlaneGeometry(20, 20);
-      const m = new THREE.MeshBasicMaterial({color:0x0f1322, transparent:true, opacity:0.0001});
-      const ground = new THREE.Mesh(g, m);
-      ground.rotation.x = -Math.PI/2;
-      ground.position.y = -0.001;
-      scene.add(ground);
-
-      // load model
-      const loader = new THREE.GLTFLoader();
-      loader.load(project.model, (gltf) => {
-        const root = gltf.scene;
-        // normalize scale
-        const box = new THREE.Box3().setFromObject(root);
-        const size = new THREE.Vector3();
-        box.getSize(size);
-        const maxDim = Math.max(size.x, size.y, size.z) || 1;
-        const scale = 1.5 / maxDim;
-        root.scale.setScalar(scale);
-        // center
-        const center = new THREE.Vector3();
-        box.getCenter(center);
-        root.position.sub(center.multiplyScalar(scale));
-        scene.add(root);
-      }, undefined, (err)=>console.error('GLB load error', err));
-
-      // simple orbit-ish controls
-      let rotY = 0;
-      let isDown = false, lastX = 0;
-      canvas.addEventListener('mousedown', (e)=>{ isDown = true; lastX = e.clientX; });
-      window.addEventListener('mouseup', ()=> isDown=false);
-      window.addEventListener('mousemove', (e)=>{ if(!isDown) return; rotY += (e.clientX - lastX) * 0.005; lastX = e.clientX; });
-
-      function animate(){
-        requestAnimationFrame(animate);
-        scene.rotation.y = rotY;
-        renderer.render(scene, camera);
-      }
-
-      fitRenderer();
-      animate();
-      window.addEventListener('resize', fitRenderer);
-    } else {
-      // no model: clear the left panel
-      qs('.viewer').innerHTML = '';
-    }
+    // gallery (images + videos)
+    const media=[...(p.images||[]), ...(p.videos||[])];
+    mountMediaSlider(document.getElementById('gallery'), media, 0, {autoplay:true});
   })();
   </script>
 </body>
