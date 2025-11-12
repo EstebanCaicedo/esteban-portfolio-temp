@@ -3,57 +3,80 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Project – Detail</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Project</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    .slide{position:relative;overflow:hidden;border-radius:20px}
+    .slide img{display:block;width:100%;height:520px;object-fit:cover}
+    .navbtn{position:absolute;top:50%;transform:translateY(-50%);background:#111827bf;border:1px solid #374151;border-radius:12px;width:40px;height:40px;color:#c7d2fe;display:grid;place-items:center}
+    .navbtn.left{left:12px} .navbtn.right{right:12px}
+    .dots{position:absolute;bottom:12px;left:0;right:0;display:flex;gap:8px;justify-content:center}
+    .dot{width:8px;height:8px;border-radius:9999px;background:#6b7280}
+    .dot.active{background:#c7d2fe}
+  </style>
 </head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="index.html">← Back</a>
-  </header>
-  <main class="container narrow" id="content">
-    <h1 id="title">Loading…</h1>
-    <p id="long"></p>
+<body class="bg-[#0b1120] text-gray-200">
+  <nav class="max-w-7xl mx-auto px-6 py-6 flex items-center gap-3">
+    <a href="index.html" class="text-indigo-300 hover:text-indigo-200">&larr; Back</a>
+    <span id="crumb" class="text-gray-400"></span>
+    <div class="ml-auto flex gap-6">
+      <a href="index.html" class="hover:text-white">Projects</a>
+      <a href="https://www.linkedin.com/in/esteban-caicedo" target="_blank" class="hover:text-white">LinkedIn</a>
+    </div>
+  </nav>
 
-    <div class="detail">
-      <div class="viewer">
-        <model-viewer id="mv" ar autoplay camera-controls tone-mapping="neutral" exposure="1" shadow-intensity="0" style="width:100%;height:460px;background:#111;border-radius:14px;"></model-viewer>
-      </div>
-      <div class="gallery" id="gallery"></div>
+  <main class="max-w-7xl mx-auto px-6 pb-16">
+    <h1 id="title" class="text-3xl font-extrabold mb-6"></h1>
+
+    <div class="grid lg:grid-cols-2 gap-8 items-start">
+      <!-- Visor 3D -->
+      <model-viewer id="mv"
+        style="width:100%;height:560px;background:#0b1220;border-radius:20px"
+        shadow-intensity="0.8" camera-controls auto-rotate ar></model-viewer>
+
+      <!-- Descripción + carrusel -->
+      <section>
+        <p id="long" class="text-gray-300 mb-6"></p>
+        <div id="sliderHost"></div>
+      </section>
     </div>
   </main>
 
-  <footer class="foot">© 2025 Esteban Caicedo</footer>
+  <footer class="border-t border-gray-800 py-8 text-center text-gray-400">
+    © 2025 Esteban Caicedo
+  </footer>
 
   <script>
-  function qs(name) { return new URLSearchParams(location.search).get(name); }
+    function q(k, d=document){ return d.querySelector(k); }
+    function getParam(name){ return new URL(location.href).searchParams.get(name); }
 
-  async function load() {
-    const slug = qs('slug');
-    const res = await fetch('projects.json', {cache: 'no-store'});
-    const projects = await res.json();
-    const p = projects.find(x => x.slug === slug) || projects[0];
+    function mountSlider(root, images){
+      const wrap = document.createElement('div'); wrap.className='slide';
+      let idx = 0;
+      const img = document.createElement('img'); img.src = images[0]; wrap.appendChild(img);
+      const L = document.createElement('button'); L.className='navbtn left'; L.innerHTML='&#x2039;';
+      const R = document.createElement('button'); R.className='navbtn right'; R.innerHTML='&#x203A;';
+      const dots = document.createElement('div'); dots.className='dots';
+      const set = i => { idx=(i+images.length)%images.length; img.src=images[idx]; [...dots.children].forEach((d,n)=>d.classList.toggle('active',n===idx)); };
+      L.onclick=()=>set(idx-1); R.onclick=()=>set(idx+1);
+      images.forEach((_,i)=>{ const d=document.createElement('div'); d.className='dot'+(i===0?' active':''); d.onclick=()=>set(i); dots.appendChild(d); });
+      wrap.append(L,R,dots); root.appendChild(wrap);
+    }
 
-    document.title = p.title + ' – Project';
-    document.getElementById('title').textContent = p.title;
-    document.getElementById('long').textContent = p.longDescription || p.description;
+    async function main(){
+      const slug = getParam('slug');
+      const res = await fetch('projects.json'); const projects = await res.json();
+      const p = projects.find(x=>x.slug===slug) || projects[0];
 
-    const mv = document.getElementById('mv');
-    mv.setAttribute('src', p.model);
+      q('#title').textContent = p.title;
+      q('#crumb').textContent = `— ${p.title}`;
+      q('#long').textContent = p.longDescription || p.description;
+      q('#mv').setAttribute('src', p.model);
 
-    const gal = document.getElementById('gallery');
-    p.images.forEach((src, i) => {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = p.title + ' ' + (i+1);
-      img.loading = 'lazy';
-      img.className = 'thumb';
-      img.onclick = () => { document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active')); img.classList.add('active'); };
-      if (i === 0) img.classList.add('active');
-      gal.appendChild(img);
-    });
-  }
-  load();
+      mountSlider(q('#sliderHost'), p.images);
+    }
+    main();
   </script>
 </body>
 </html>
