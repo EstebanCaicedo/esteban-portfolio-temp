@@ -15,5 +15,22 @@
       "assets/images/Airplane Model3.jpg"
     ],
     "model": "assets/models/AIR_PLANE_CLEAN.glb"
+  },
+  {
+    "title": "Antonov AN-10 \u2014 Surfaces-001",
+    "slug": "antonov-an10",
+    "description": "Surface-model practice: AN-10 transport aircraft \u2014 clean topology and renders.",
+    "longDescription": "First pass at the Antonov AN-10 using a surface-driven workflow (lofted skins, guide curves, and continuity checks).",
+    "tags": [
+      "CAD",
+      "Surfaces",
+      "3D"
+    ],
+    "images": [
+      "assets/images/Antonov1.jpg",
+      "assets/images/Antonov2.jpg",
+      "assets/images/Antonov3.jpg"
+    ],
+    "model": "assets/models/Antonov.glb"
   }
 ]
