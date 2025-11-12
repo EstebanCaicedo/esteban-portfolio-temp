@@ -1,18 +1,309 @@
-:root{--bg:#0b1220;--card:#151b2b;--ink:#e6e9f5;--mut:#9aa3b2;--brand:#4f6af3;--dim:#4058ca;--r:1.25rem}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif}
-a{color:inherit;text-decoration:none}.header{max-width:1100px;margin:36px auto 8px;padding:0 20px}
-.header h1{font-size:44px;margin:0 0 8px}.header p{margin:0;color:var(--mut)}
-.wrap{max-width:1100px;margin:0 auto;padding:20px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
-.card{background:var(--card);border-radius:24px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.media{position:relative;height:230px;background:#0e1422}
-.media img,.media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;border:0}
-.badges{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 8px}.badges span{background:#0f1730;color:var(--ink);font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.06)}
-.body{padding:16px 20px 20px}.body h3{margin:0 0 6px}.body p{margin:0 0 10px;color:var(--mut)}
-.btn{display:inline-block;background:var(--brand);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600}.btn:hover{background:var(--dim)}
-.proj{max-width:1200px;margin:20px auto;padding:20px;display:grid;grid-template-columns:1.2fr 1fr;gap:24px}
-.viewer{background:var(--card);border-radius:24px;min-height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.right{background:var(--card);border-radius:24px;overflow:hidden}.slider{position:relative;height:340px;background:#0e1422}
-.slider>img,.slider>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.track{display:flex;gap:8px;justify-content:center;padding:10px}.dot{width:8px;height:8px;border-radius:999px;background:#2b3550}.dot.active{background:#b9c0ff}
-.back{display:inline-block;margin:18px 0 0 20px;color:#b9c0ff}canvas{display:block;max-width:100%}
-@media (max-width:900px){.proj{grid-template-columns:1fr}.viewer{min-height:320px}}
+/* =========================================================
+   Esteban Portfolio — Core Style (v2.6.1 full)
+   ========================================================= */
+:root {
+  --bg: #0b1220;
+  --card: #151b2b;
+  --ink: #e6e9f5;
+  --mut: #9aa3b2;
+  --brand: #4f6af3;
+  --dim: #4058ca;
+  --r: 1.25rem;
+}
+
+/* ------------------------------
+   Base & Typography
+--------------------------------*/
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ------------------------------
+   Header
+--------------------------------*/
+.header {
+  max-width: 1100px;
+  margin: 36px auto 8px;
+  padding: 0 20px;
+}
+
+.header h1 {
+  font-size: 44px;
+  margin: 0 0 8px;
+}
+
+.header p {
+  margin: 0;
+  color: var(--mut);
+}
+
+/* ------------------------------
+   Grid / Cards
+--------------------------------*/
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.media {
+  position: relative;
+  height: 230px;
+  background: #0e1422;
+  overflow: hidden;
+}
+
+.media img,
+.media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: 0;
+}
+
+.body {
+  padding: 16px 20px 20px;
+}
+
+.body h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+
+.body p {
+  margin: 0 0 10px;
+  color: var(--mut);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0 20px 8px;
+}
+
+.badges span {
+  background: #0f1730;
+  color: var(--ink);
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.btn {
+  display: inline-block;
+  background: var(--brand);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: background 0.25s ease;
+}
+
+.btn:hover {
+  background: var(--dim);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.card .btn {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+/* ------------------------------
+   Project Layout
+--------------------------------*/
+.proj {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+}
+
+.viewer {
+  background: var(--card);
+  border-radius: 24px;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.right {
+  background: var(--card);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.right h1 {
+  font-size: 1.8rem;
+  padding: 18px 20px 0;
+}
+
+.right p {
+  padding: 6px 20px 14px;
+  color: var(--mut);
+}
+
+/* ------------------------------
+   Slider (Carrusel)
+--------------------------------*/
+.slider {
+  position: relative;
+  height: 340px;
+  background: #0e1422;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.slider img,
+.slider video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.slider video {
+  background: #000;
+}
+
+.track {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 10px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #2b3550;
+  transition: background 0.3s ease;
+}
+
+.dot.active {
+  background: #b9c0ff;
+}
+
+/* --- Flechas del carrusel --- */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 22px;
+  line-height: 0;
+  transition: background 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.nav-btn.left-3 {
+  left: 12px;
+}
+
+.nav-btn.right-3 {
+  right: 12px;
+}
+
+/* ------------------------------
+   Misc Elements
+--------------------------------*/
+.back {
+  display: inline-block;
+  margin: 18px 0 0 20px;
+  color: #b9c0ff;
+  transition: color 0.2s ease;
+}
+
+.back:hover {
+  color: #ffffff;
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  border-radius: 24px;
+}
+
+/* --- dots global --- */
+.dot-active {
+  background: rgba(99, 102, 241, 1); /* Indigo-500 */
+}
+
+/* ------------------------------
+   Responsive
+--------------------------------*/
+@media (max-width: 900px) {
+  .proj {
+    grid-template-columns: 1fr;
+  }
+
+  .viewer {
+    min-height: 320px;
+  }
+}
