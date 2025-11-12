@@ -24,5 +24,19 @@
       "assets/images/Antonov3.jpg"
     ],
     "model": "assets/models/Antonov.glb"
+  },
+  {
+    "title": "Fifth Mill Practice",
+    "slug": "fifth-mill-practice",
+    "description": "CNC mill practice — three operations, roughing/finishing toolpaths; videos + 3D model viewer.",
+    "longDescription": "Practice part programmed for three machining operations (roughing, semi-finishing, finishing). Includes toolpath strategy and a clean GLB for real-time viewing.",
+    "tags": ["CAD", "Manufacturing", "3D"],
+    "images": [],
+    "videos": [
+      "assets/videos/Fifth Mill Practice1.mp4",
+      "assets/videos/Fifth Mill Practice2.mp4",
+      "assets/videos/Fifth Mill Practice3.mp4"
+    ],
+    "model": "assets/models/Fifth Mill Practice.glb"
   }
 ]
