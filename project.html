@@ -1,82 +1,116 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Project</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-  <style>
-    .slide{position:relative;overflow:hidden;border-radius:20px}
-    .slide img{display:block;width:100%;height:520px;object-fit:cover}
-    .navbtn{position:absolute;top:50%;transform:translateY(-50%);background:#111827bf;border:1px solid #374151;border-radius:12px;width:40px;height:40px;color:#c7d2fe;display:grid;place-items:center}
-    .navbtn.left{left:12px} .navbtn.right{right:12px}
-    .dots{position:absolute;bottom:12px;left:0;right:0;display:flex;gap:8px;justify-content:center}
-    .dot{width:8px;height:8px;border-radius:9999px;background:#6b7280}
-    .dot.active{background:#c7d2fe}
-  </style>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-<body class="bg-[#0b1120] text-gray-200">
-  <nav class="max-w-7xl mx-auto px-6 py-6 flex items-center gap-3">
-    <a href="index.html" class="text-indigo-300 hover:text-indigo-200">&larr; Back</a>
-    <span id="crumb" class="text-gray-400"></span>
-    <div class="ml-auto flex gap-6">
-      <a href="index.html" class="hover:text-white">Projects</a>
-      <a href="https://www.linkedin.com/in/esteban-caicedo" target="_blank" class="hover:text-white">LinkedIn</a>
+<body>
+  <div class="container">
+    <div class="nav">
+      <a href="index.html">← Back</a>
+      <div style="display:flex;gap:18px">
+        <a href="index.html">Projects</a>
+        <a href="https://www.linkedin.com/in/esteban-caicedo/" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
     </div>
-  </nav>
 
-  <main class="max-w-7xl mx-auto px-6 pb-16">
-    <h1 id="title" class="text-3xl font-extrabold mb-6"></h1>
+    <div id="title" style="font-size:28px;font-weight:700;margin:8px 0 18px"></div>
 
-    <div class="grid lg:grid-cols-2 gap-8 items-start">
-      <!-- Visor 3D -->
-      <model-viewer id="mv"
-        style="width:100%;height:560px;background:#0b1220;border-radius:20px"
-        shadow-intensity="0.8" camera-controls auto-rotate ar></model-viewer>
+    <div class="detail">
+      <!-- 3D viewer -->
+      <div class="viewer" id="viewer">
+        <!-- Si no se puede cargar el model, se mostrará un mensaje -->
+      </div>
 
-      <!-- Descripción + carrusel -->
-      <section>
-        <p id="long" class="text-gray-300 mb-6"></p>
-        <div id="sliderHost"></div>
-      </section>
+      <!-- description + gallery -->
+      <div>
+        <p id="long" class="p-sm" style="margin:6px 0 18px"></p>
+        <div id="gallery" class="slider" style="aspect-ratio:16/9"></div>
+      </div>
     </div>
-  </main>
-
-  <footer class="border-t border-gray-800 py-8 text-center text-gray-400">
-    © 2025 Esteban Caicedo
-  </footer>
+  </div>
 
   <script>
-    function q(k, d=document){ return d.querySelector(k); }
-    function getParam(name){ return new URL(location.href).searchParams.get(name); }
-
-    function mountSlider(root, images){
-      const wrap = document.createElement('div'); wrap.className='slide';
-      let idx = 0;
-      const img = document.createElement('img'); img.src = images[0]; wrap.appendChild(img);
-      const L = document.createElement('button'); L.className='navbtn left'; L.innerHTML='&#x2039;';
-      const R = document.createElement('button'); R.className='navbtn right'; R.innerHTML='&#x203A;';
-      const dots = document.createElement('div'); dots.className='dots';
-      const set = i => { idx=(i+images.length)%images.length; img.src=images[idx]; [...dots.children].forEach((d,n)=>d.classList.toggle('active',n===idx)); };
-      L.onclick=()=>set(idx-1); R.onclick=()=>set(idx+1);
-      images.forEach((_,i)=>{ const d=document.createElement('div'); d.className='dot'+(i===0?' active':''); d.onclick=()=>set(i); dots.appendChild(d); });
-      wrap.append(L,R,dots); root.appendChild(wrap);
+  // ====== same helpers as index ======
+  const isVideo=(src)=>/\.(mp4|webm|ogg)$/i.test(src);
+  function makeMediaEl(src){
+    if(isVideo(src)){const v=document.createElement('video');v.src=src;v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='metadata';v.setAttribute('disablepictureinpicture','');return v;}
+    const img=new Image();img.src=src;img.alt='';img.loading='lazy';return img;
+  }
+  function mountMediaSlider(container, mediaPaths, heightPx, opts){
+    opts=opts||{}; const autoplay=opts.autoplay!==false; const interval=opts.interval||3000;
+    container.classList.add('slider'); if(heightPx) container.style.height=heightPx+'px';
+    const a=document.createElement('div');a.className='slide-layer active';
+    const b=document.createElement('div');b.className='slide-layer';
+    let useA=true, idx=0, timer=null;
+    a.appendChild(makeMediaEl(mediaPaths[0]||'')); b.appendChild(makeMediaEl(mediaPaths[1]||mediaPaths[0]||'')); container.append(a,b);
+    const left=document.createElement('div'); left.className='ctrl left'; left.textContent='‹';
+    const right=document.createElement('div'); right.className='ctrl right'; right.textContent='›';
+    container.append(left,right);
+    let dots=null;
+    if(mediaPaths.length>1){
+      dots=document.createElement('div');dots.className='dots';
+      mediaPaths.forEach((_,i)=>{const d=document.createElement('span');d.className='dot'+(i===0?' active':'');d.onclick=()=>show(i);dots.appendChild(d);});
+      container.appendChild(dots);
     }
-
-    async function main(){
-      const slug = getParam('slug');
-      const res = await fetch('projects.json'); const projects = await res.json();
-      const p = projects.find(x=>x.slug===slug) || projects[0];
-
-      q('#title').textContent = p.title;
-      q('#crumb').textContent = `— ${p.title}`;
-      q('#long').textContent = p.longDescription || p.description;
-      q('#mv').setAttribute('src', p.model);
-
-      mountSlider(q('#sliderHost'), p.images);
+    function show(nextIndex){
+      idx=(nextIndex+mediaPaths.length)%mediaPaths.length;
+      const target=(useA?b:a); target.innerHTML=''; target.appendChild(makeMediaEl(mediaPaths[idx]||''));
+      (useA?a:b).classList.remove('active'); (useA?b:a).classList.add('active'); useA=!useA;
+      if(dots){dots.childNodes.forEach((d,i)=>d.className='dot'+(i===idx?' active':''));}
     }
-    main();
+    left.onclick=()=>show(idx-1); right.onclick=()=>show(idx+1);
+    function start(){ if(autoplay && mediaPaths.length>1) timer=setInterval(()=>show(idx+1), interval); }
+    function stop(){ if(timer){clearInterval(timer); timer=null;} }
+    container.addEventListener('mouseenter',stop); container.addEventListener('mouseleave',start);
+    start();
+  }
+
+  // ====== very light 3D viewer (model-viewer fallback-free) ======
+  // Usamos <model-viewer> si está disponible; si no, mostramos texto.
+  function mountModel(container, src) {
+    if (!src) { container.innerHTML='<div style="opacity:.7">No 3D model.</div>'; return; }
+
+    // Intento con <model-viewer> (si el browser lo soporta o ya lo tenías)
+    const tag = document.createElement('model-viewer');
+    tag.setAttribute('src', src);
+    tag.setAttribute('camera-controls','');
+    tag.setAttribute('auto-rotate','');
+    tag.setAttribute('exposure','1.0');
+    tag.style.width='100%'; tag.style.height='100%';
+    tag.addEventListener('error', ()=> { container.innerHTML='<div style="opacity:.7">Model preview not available.</div>'; });
+    container.innerHTML=''; container.appendChild(tag);
+
+    // Carga del script solo si no existe
+    if (!customElements.get('model-viewer')) {
+      const s=document.createElement('script');
+      s.type='module';
+      s.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
+      document.head.appendChild(s);
+    }
+  }
+
+  // ====== load & render ======
+  (async function(){
+    const params=new URLSearchParams(location.search);
+    const slug=params.get('slug');
+
+    const res=await fetch('projects.json',{cache:'no-store'});
+    const list=await res.json();
+    const p=list.find(x=>x.slug===slug) || list[0];
+
+    document.getElementById('title').textContent = p.title || 'Project';
+    document.getElementById('long').textContent  = p.longDescription || '';
+
+    // viewer
+    mountModel(document.getElementById('viewer'), p.model || '');
+
+    // gallery (images + videos)
+    const media=[...(p.images||[]), ...(p.videos||[])];
+    mountMediaSlider(document.getElementById('gallery'), media, 0, {autoplay:true});
+  })();
   </script>
 </body>
 </html>
