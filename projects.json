@@ -4,11 +4,7 @@
     "slug": "airplane-model",
     "description": "Concept single-engine light aircraft model — interactive 3D viewer and renders.",
     "longDescription": "WIP — Detailed description to be added (design intent, constraints, mating strategy, mass properties, and manufacturing considerations).",
-    "tags": [
-      "CAD",
-      "Assembly",
-      "3D"
-    ],
+    "tags": ["CAD", "Assembly", "3D"],
     "images": [
       "assets/images/Airplane Model1.jpg",
       "assets/images/Airplane Model2.jpg",
@@ -21,11 +17,7 @@
     "slug": "antonov-an10",
     "description": "Surface-model practice: AN-10 transport aircraft — clean topology and renders.",
     "longDescription": "First pass at the Antonov AN-10 using a surface-driven workflow (lofted skins, guide curves, and continuity checks).",
-    "tags": [
-      "CAD",
-      "Surfaces",
-      "3D"
-    ],
+    "tags": ["CAD", "Surfaces", "3D"],
     "images": [
       "assets/images/Antonov1.jpg",
       "assets/images/Antonov2.jpg",
@@ -37,43 +29,14 @@
     "title": "Fifth Mill Practice",
     "slug": "fifth-mill-practice",
     "description": "CNC mill practice — three operations, roughing/finishing toolpaths; videos + 3D model viewer.",
-    "longDescription": "Facing, pocketing, and contour operations with updated feeds/speeds. Includes three run clips and a web-viewable GLB of the part.",
-    "tags": [
-      "CAD",
-      "Manufacturing",
-      "3D"
-    ],
+    "longDescription": "Practice part programmed for three machining operations (roughing, semi-finishing, finishing). Includes toolpath strategy and a clean GLB for real-time viewing.",
+    "tags": ["CAD", "Manufacturing", "3D"],
+    "images": [],
     "videos": [
       "assets/videos/Fifth Mill Practice1.mp4",
       "assets/videos/Fifth Mill Practice2.mp4",
       "assets/videos/Fifth Mill Practice3.mp4"
     ],
     "model": "assets/models/Fifth Mill Practice.glb"
-  },
-  {
-    "title": "First Lathe Project",
-    "slug": "first-lathe-project",
-    "description": "Intro lathe practice — basic turning ops with single video and 3D model viewer.",
-    "longDescription": "Starter turning exercise covering facing, turning, and cutoff. One short demonstration video and a lightweight GLB for interactive viewing.",
-    "tags": [
-      "CAD",
-      "Manufacturing",
-      "3D"
-    ],
-    "videos": [
-      "assets/videos/First Lathe Project.mp4"
-    ],
-    "model": "assets/models/First Lathe Project.glb"
-  },
-  {
-  "title": "First Lathe Project",
-  "slug": "first-lathe-project",
-  "description": "Intro lathe practice — basic turning ops with single video and 3D model viewer.",
-  "longDescription": "Short lathe practice focused on facing, turning and chamfering. Includes a GLB viewer and one process video.",
-  "tags": ["CAD", "Manufacturing", "3D"],
-  "images": [
-    "assets/videos/First Lathe Project.mp4"
-  ],
-  "model": "assets/models/First Lathe Project.glb"
-}
+  }
 ]
