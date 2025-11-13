@@ -1,6 +1,6 @@
 /* ============================
-   GRAFFITI WALL THEME – v1
-   (para index.html y project.html)
+   GRAFFITI WALL THEME – v2
+   (index & project)
    ============================ */
 
 /* ---------- Palette ---------- */
@@ -46,75 +46,68 @@ body {
   padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
 
-  /* base muy oscura */
   background-color: #05030a;
 
-  /* Triángulos más pequeños + banda oscura central */
   background-image:
-    /* vinotinto arriba izquierda (más fuera del lienzo) */
     linear-gradient(
       135deg,
       rgba(120, 0, 40, 0.95) 0%,
       rgba(120, 0, 40, 0.95) 40%,
       transparent 40%
     ),
-    /* morado arriba derecha */
     linear-gradient(
       -135deg,
       rgba(60, 0, 80, 0.9) 0%,
       rgba(60, 0, 80, 0.9) 36%,
       transparent 36%
     ),
-    /* teal abajo izquierda */
     linear-gradient(
       35deg,
       rgba(0, 85, 95, 0.50) 0%,
       rgba(0, 85, 95, 0.50) 28%,
       transparent 28%
     ),
-    /* dorado abajo derecha */
     linear-gradient(
       -30deg,
       rgba(210, 150, 60, 0.28) 0%,
       rgba(210, 150, 60, 0.28) 24%,
       transparent 24%
     ),
-    /* banda oscura central para que todo se unifique */
     radial-gradient(circle at 50% 20%, rgba(0,0,0,0.65), transparent 65%);
   
   background-repeat: no-repeat;
   background-position:
-    -22% -30%,   /* vinotinto más fuera */
-    122% -30%,   /* morado más fuera */
-    -25% 135%,   /* teal más abajo */
-    125% 140%,   /* dorado más abajo */
-    50% 20%;     /* radial central */
+    -22% -30%,
+    122% -30%,
+    -25% 135%,
+    125% 140%,
+    50% 20%;
   background-size:
-    45% 55%,     /* vinotinto */
-    45% 55%,     /* morado */
-    38% 45%,     /* teal */
-    32% 40%,     /* dorado */
-    140% 120%;   /* radial */
+    45% 55%,
+    45% 55%,
+    38% 45%,
+    32% 40%,
+    140% 120%;
   
   background-attachment: fixed;
   position: relative;
 }
 
-/* Ruido muy suave para que no se vea plano (opcional pero queda pro) */
+/* Noise texture */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: -1;
-  opacity: 0.08; /* si quieres más textura, sube a 0.12–0.16 */
+  opacity: 0.08;
   mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
-
-/* Links base */
 a {
   color: inherit;
   text-decoration: none;
@@ -128,59 +121,59 @@ a {
   padding: 32px 20px 52px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
-}
-
-@media (max-width: 1100px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 720px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ---------- NAV / HEADER ---------- */
 
 .nav {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  padding: 18px 0 12px;
-  margin-bottom: 14px;
+  gap: 16px;
+  padding: 8px 0 18px;
+  margin-bottom: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.nav h1 {
+.nav-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.site-title {
   margin: 0;
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
-/* Subtítulo bajo el h1 */
-.nav + p {
-  margin: 8px 0 26px;
-  color: var(--muted);
-  font-size: 14px;
+.site-title--small {
+  font-size: 24px;
 }
 
-/* Menú: Projects / LinkedIn con “trazo spray” */
-.nav > div a {
+.tagline {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 520px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-links a {
   position: relative;
   font-size: 14px;
   padding-bottom: 4px;
   opacity: 0.9;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.nav > div a::after {
+.nav-links a::after {
   content: "";
   position: absolute;
   left: -2px;
@@ -197,14 +190,57 @@ a {
   transition: transform 0.22s ease-out, opacity 0.22s ease-out;
 }
 
-.nav > div a:hover {
+.nav-links a:hover {
   opacity: 1;
 }
 
-.nav > div a:hover::after,
-.nav > div a.active::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
   transform: scaleX(1);
   opacity: 1;
+}
+
+/* Back pill on project page */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.14);
+  background: radial-gradient(circle at 0 0, rgba(255,255,255,0.15), transparent 70%);
+  width: fit-content;
+  margin-bottom: 4px;
+}
+
+.back-link:hover {
+  border-color: rgba(255,217,90,0.75);
+  color: #fff8dc;
+}
+
+/* ---------- GRID ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 18px;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- CARDS (index) ---------- */
@@ -215,8 +251,8 @@ a {
   flex-direction: column;
   border-radius: var(--radius-card);
   background:
-    linear-gradient(195deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.96) 30%),
-    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.18), transparent 60%),
+    linear-gradient(195deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.98) 30%),
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.16), transparent 60%),
     linear-gradient(145deg, #1b0011, #080008 60%, #030004 100%);
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: var(--shadow-soft);
@@ -229,7 +265,21 @@ a {
     background 0.16s ease-out;
 }
 
-/* Cinta de luz arriba de la tarjeta */
+/* Entrance animation */
+.card--fade-in {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: cardFadeUp 420ms ease-out forwards;
+}
+
+@keyframes cardFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Top glow strip */
 .card::before {
   content: "";
   position: absolute;
@@ -243,15 +293,14 @@ a {
       rgba(255, 255, 255, 0.25),
       rgba(255, 255, 255, 0.0)),
     linear-gradient(110deg,
-      rgba(255, 79, 132, 0.4),
+      rgba(255, 79, 132, 0.35),
       rgba(255, 217, 90, 0.4),
       rgba(70, 225, 212, 0.35),
       transparent 80%);
-  opacity: 0.35;
+  opacity: 0.4;
   pointer-events: none;
 }
 
-/* Hover: más profundidad, sin cambiar de color raro */
 .card:hover,
 .card:focus,
 .card:focus-within {
@@ -262,28 +311,31 @@ a {
     0 0 26px rgba(255, 217, 90, 0.2);
 }
 
-/* Parte superior de la card (donde va el slider) */
 .card > div:first-child {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Cuerpo de la card */
 .card-body {
-  padding: 20px 20px 18px;
+  padding: 18px 18px 16px;
 }
 
-.h3,
-.card__title {
-  font-size: 18px;
+.h3 {
+  font-size: 17px;
   font-weight: 600;
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
-.p-sm,
-.card__desc {
+.p-sm {
   font-size: 14px;
   color: var(--muted);
-  margin: 0 0 14px;
+}
+
+.card-desc {
+  margin: 0 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ---------- Tags / chips ---------- */
@@ -320,7 +372,7 @@ a {
     0 0 16px rgba(255, 217, 90, 0.35);
 }
 
-/* ---------- Botón "Open" ---------- */
+/* ---------- Button "Open" ---------- */
 
 .btn {
   position: relative;
@@ -344,7 +396,6 @@ a {
     filter 0.14s ease-out;
 }
 
-/* Brillo superior tipo metal */
 .btn::after {
   content: "";
   position: absolute;
@@ -359,7 +410,6 @@ a {
   pointer-events: none;
 }
 
-/* Halo suave tipo spray */
 .btn::before {
   content: "";
   position: absolute;
@@ -371,7 +421,6 @@ a {
   transition: opacity 0.16s ease-out, filter 0.16s ease-out;
 }
 
-/* IMPORTANTE: hover NO cambia el color base del botón */
 .btn:hover {
   transform: translateY(-1px);
   filter: brightness(1.02);
@@ -385,12 +434,23 @@ a {
   filter: blur(2px);
 }
 
-/* ---------- Slider (cards + detalle) ---------- */
+/* ---------- Slider ---------- */
 
 .slider {
   position: relative;
   overflow: hidden;
-  background: radial-gradient(circle at center, #20020e 0%, #070004 80%);
+  background:
+    radial-gradient(circle at center, #20020e 0%, #070004 80%);
+}
+
+.slider::after {
+  /* ligera sombra en la parte inferior */
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 28%;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.6));
+  pointer-events: none;
 }
 
 .slide-layer {
@@ -412,14 +472,28 @@ a {
   display: block;
 }
 
-/* Flechas del slider */
+/* Empty sliders (cuando no hay media) */
+.slider--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px;
+  background: radial-gradient(circle at center, #140610 0%, #050008 80%);
+}
+
+.slider-empty-msg {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Slider controls */
 .ctrl {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
   border: 1px solid rgba(0, 0, 0, 0.85);
   background:
@@ -434,15 +508,15 @@ a {
   font-size: 18px;
 }
 
-.ctrl.left { left: 16px; }
-.ctrl.right { right: 16px; }
+.ctrl.left { left: 14px; }
+.ctrl.right { right: 14px; }
 
-/* Dots del slider */
+/* Dots */
 .dots {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 12px;
+  bottom: 10px;
   display: flex;
   gap: 6px;
   justify-content: center;
@@ -466,15 +540,26 @@ a {
   display: grid;
   grid-template-columns: 1.1fr 0.95fr;
   gap: 26px;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
-@media (max-width: 960px) {
-  .detail {
-    grid-template-columns: 1fr;
-  }
+.detail-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
+.detail-text {
+  margin: 0;
+}
+
+.detail-gallery {
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  min-height: 200px;
+}
+
+/* 3D viewer container */
 .viewer {
   background:
     linear-gradient(190deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.98) 28%),
@@ -487,6 +572,7 @@ a {
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
 .viewer canvas,
@@ -495,35 +581,48 @@ a {
   height: 100%;
 }
 
-#title {
-  font-size: 26px;
-  font-weight: 600;
-}
-
-#long {
-  font-size: 14px;
+.viewer-empty {
   color: var(--muted);
-}
-
-#gallery.slider {
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 14px;
 }
 
 /* ---------- Responsive extra ---------- */
 
+@media (max-width: 960px) {
+  .detail {
+    grid-template-columns: 1fr;
+  }
+
+  .viewer {
+    height: 380px;
+  }
+}
+
 @media (max-width: 720px) {
+  .container {
+    padding: 22px 16px 36px;
+  }
+
   .nav {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
   }
 
-  .nav h1 {
-    font-size: 32px;
+  .site-title {
+    font-size: 28px;
   }
 
-  .nav + p {
-    margin-bottom: 20px;
+  .site-title--small {
+    font-size: 20px;
+  }
+
+  .nav-links {
+    gap: 14px;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 4px;
   }
 }
