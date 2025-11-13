@@ -1,27 +1,31 @@
-/* =============== AEROSPACE BLACK LABEL THEME =============== */
-/* Paleta seria, técnica, tipo "aerospace / tooling" */
+/* ============================
+   GRAFFITI WALL THEME – v1
+   (para index.html y project.html)
+   ============================ */
+
+/* ---------- Palette ---------- */
 :root {
-  --bg: #05070b;
-  --bg-elevated: #0b0f19;
-  --bg-card: #111624;
-  --bg-card-soft: #141a2a;
-  --ink: #e5e9f5;
-  --muted: #8f96a7;
+  --wall-base: #050308;
+  --wall-deep: #020106;
+  --panel: #0c0710;
+  --panel-soft: #120a18;
+  --ink: #f4f2f7;
+  --muted: #b2a9c0;
 
-  --accent: #2f92c2;        /* azul petróleo */
-  --accent-soft: #203956;
-  --accent-strong: #45c4e5;
+  --spray-yellow: #ffd95a;
+  --spray-pink: #ff4f84;
+  --spray-cyan: #46e1d4;
+  --spray-violet: #8b6dff;
 
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-strong: rgba(43, 152, 204, 0.55);
+  --tag-chip: #211324;
 
-  --radius-card: 18px;
+  --radius-card: 22px;
   --radius-pill: 999px;
 
-  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.65);
+  --shadow-soft: 0 20px 45px rgba(0, 0, 0, 0.9);
 }
 
-/* ================== RESET / BASE ================== */
+/* ---------- Reset / base ---------- */
 
 *,
 *::before,
@@ -31,36 +35,73 @@
 
 html,
 body {
-  height: 100%;
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
+
+  /* Pared con grafiti: mezclamos manchas, sprays y degradado oscuro */
   background:
-    radial-gradient(circle at 0% -40%, rgba(85, 165, 215, 0.18), transparent 55%),
-    radial-gradient(circle at 100% 130%, rgba(56, 235, 198, 0.14), transparent 60%),
-    linear-gradient(180deg, #05070b 0%, #05060a 45%, #020308 100%);
+    radial-gradient(circle at 8% 0%, rgba(255, 217, 90, 0.16), transparent 55%),
+    radial-gradient(circle at 95% 10%, rgba(255, 79, 132, 0.22), transparent 55%),
+    radial-gradient(circle at 5% 95%, rgba(70, 225, 212, 0.18), transparent 55%),
+    linear-gradient(160deg, #230019 0%, #070110 48%, #020106 100%);
   background-attachment: fixed;
+  position: relative;
 }
 
-/* Links */
+/* Ruido + textura de pared */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(145deg,
+      rgba(255, 255, 255, 0.06) 0 18px,
+      transparent 18px 40px),
+    linear-gradient(215deg,
+      rgba(0, 0, 0, 0.55) 0 22px,
+      transparent 22px 44px),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.0' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.8'/%3E%3C/svg%3E");
+  z-index: -1;
+}
+
+/* Sprays de color muy suaves encima */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  pointer-events: none;
+  opacity: 0.25;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle at 15% 40%, rgba(255, 217, 90, 0.32), transparent 60%),
+    radial-gradient(circle at 70% 20%, rgba(255, 79, 132, 0.28), transparent 60%),
+    radial-gradient(circle at 85% 90%, rgba(139, 109, 255, 0.26), transparent 60%);
+  z-index: -1;
+}
+
+/* Links base */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* ================== LAYOUT ================== */
+/* ---------- Layout ---------- */
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 20px 48px;
+  padding: 32px 20px 52px;
 }
 
-/* Grid de proyectos */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -79,31 +120,33 @@ a {
   }
 }
 
-/* ================== NAV / HEADER ================== */
+/* ---------- NAV / HEADER ---------- */
 
 .nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 0 14px;
+  padding: 18px 0 12px;
   margin-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .nav h1 {
   margin: 0;
   font-size: 40px;
-  letter-spacing: 0.04em;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
+/* Subtítulo bajo el h1 */
 .nav + p {
   margin: 8px 0 26px;
   color: var(--muted);
   font-size: 14px;
 }
 
-/* Links del header (Projects, LinkedIn) */
+/* Menú: Projects / LinkedIn con “trazo spray” */
 .nav > div a {
   position: relative;
   font-size: 14px;
@@ -114,12 +157,14 @@ a {
 .nav > div a::after {
   content: "";
   position: absolute;
-  left: 0;
+  left: -2px;
+  right: -2px;
   bottom: 0;
-  width: 100%;
-  height: 2px;
+  height: 3px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  background:
+    radial-gradient(circle at 0% 50%, rgba(255, 79, 132, 0.9), transparent 70%),
+    radial-gradient(circle at 100% 50%, rgba(70, 225, 212, 0.9), transparent 70%);
   transform-origin: left;
   transform: scaleX(0);
   opacity: 0;
@@ -136,17 +181,21 @@ a {
   opacity: 1;
 }
 
-/* ================== CARDS (INDEX) ================== */
+/* ---------- CARDS (index) ---------- */
 
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-card);
-  background: radial-gradient(circle at top, #171e30 0, #0c111e 55%);
-  border: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(195deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.96) 30%),
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.18), transparent 60%),
+    linear-gradient(145deg, #1b0011, #080008 60%, #030004 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: var(--shadow-soft);
   overflow: hidden;
+  transform: translateY(0);
   transition:
     transform 0.16s ease-out,
     box-shadow 0.16s ease-out,
@@ -154,25 +203,47 @@ a {
     background 0.16s ease-out;
 }
 
-/* hover serio, sin colores chillones */
-.card:hover,
-.card:focus-within {
-  transform: translateY(-4px);
-  border-color: var(--border-strong);
-  box-shadow:
-    0 22px 50px rgba(0, 0, 0, 0.95),
-    0 0 0 1px rgba(11, 130, 180, 0.35);
-  background: radial-gradient(circle at top, #19263b 0, #0b101b 60%);
+/* Cinta de luz arriba de la tarjeta */
+.card::before {
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: -2px;
+  height: 64px;
+  border-radius: 26px 26px 0 0;
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.25),
+      rgba(255, 255, 255, 0.0)),
+    linear-gradient(110deg,
+      rgba(255, 79, 132, 0.4),
+      rgba(255, 217, 90, 0.4),
+      rgba(70, 225, 212, 0.35),
+      transparent 80%);
+  opacity: 0.35;
+  pointer-events: none;
 }
 
-/* parte superior (slider) */
+/* Hover: más profundidad, sin cambiar de color raro */
+.card:hover,
+.card:focus,
+.card:focus-within {
+  transform: translateY(-4px);
+  border-color: rgba(255, 217, 90, 0.55);
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 1),
+    0 0 26px rgba(255, 217, 90, 0.2);
+}
+
+/* Parte superior de la card (donde va el slider) */
 .card > div:first-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Cuerpo de la card */
 .card-body {
-  padding: 18px 18px 16px;
+  padding: 20px 20px 18px;
 }
 
 .h3,
@@ -180,7 +251,6 @@ a {
   font-size: 18px;
   font-weight: 600;
   margin: 0 0 8px;
-  color: var(--ink);
 }
 
 .p-sm,
@@ -190,7 +260,8 @@ a {
   margin: 0 0 14px;
 }
 
-/* tags / chips */
+/* ---------- Tags / chips ---------- */
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -203,53 +274,97 @@ a {
   align-items: center;
   padding: 5px 11px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.15), transparent 70%),
+    linear-gradient(135deg, #2b0a33, #140619);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: #f2e7ff;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.7);
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, border-color 0.12s ease-out;
 }
 
 .chip:hover {
-  border-color: rgba(111, 199, 228, 0.7);
-  color: #d9edf7;
+  transform: translateY(-1px);
+  border-color: rgba(255, 217, 90, 0.75);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.85),
+    0 0 16px rgba(255, 217, 90, 0.35);
 }
 
-/* Botón "Open" – serio, sin glow raro */
+/* ---------- Botón "Open" ---------- */
+
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 9px 18px;
+  padding: 9px 22px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(93, 158, 205, 0.5);
-  background: linear-gradient(135deg, #1b293a, #163046);
-  color: #e8f4ff;
+  border: 0;
+  background: linear-gradient(135deg, #f7d36b, #e3a943);
+  color: #221204;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.65);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.65),
+    0 18px 42px rgba(0, 0, 0, 0.95);
   transition:
     transform 0.14s ease-out,
     box-shadow 0.14s ease-out,
-    background 0.14s ease-out,
-    border-color 0.14s ease-out;
+    filter 0.14s ease-out;
 }
 
+/* Brillo superior tipo metal */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 2px 3px 52%;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.0)
+  );
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Halo suave tipo spray */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.22), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease-out, filter 0.16s ease-out;
+}
+
+/* IMPORTANTE: hover NO cambia el color base del botón */
 .btn:hover {
   transform: translateY(-1px);
-  background: linear-gradient(135deg, #253a51, #21425e);
-  border-color: rgba(111, 199, 228, 0.9);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+  filter: brightness(1.02);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 24px 56px rgba(0, 0, 0, 1);
 }
 
-/* ================== SLIDER (cards & detalle) ================== */
+.btn:hover::before {
+  opacity: 1;
+  filter: blur(2px);
+}
+
+/* ---------- Slider (cards + detalle) ---------- */
 
 .slider {
   position: relative;
   overflow: hidden;
-  background: #05070c;
+  background: radial-gradient(circle at center, #20020e 0%, #070004 80%);
 }
 
 .slide-layer {
@@ -271,18 +386,20 @@ a {
   display: block;
 }
 
-/* Controles izquierda/derecha */
+/* Flechas del slider */
 .ctrl {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
-  background: rgba(6, 9, 16, 0.85);
-  color: #e5e9f5;
+  width: 36px;
+  height: 36px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  width: 34px;
-  height: 34px;
+  border: 1px solid rgba(0, 0, 0, 0.85);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.15), transparent 70%),
+    linear-gradient(145deg, #1b1324, #05030a);
+  color: #f4f2f7;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -291,19 +408,10 @@ a {
   font-size: 18px;
 }
 
-.ctrl.left {
-  left: 14px;
-}
+.ctrl.left { left: 16px; }
+.ctrl.right { right: 16px; }
 
-.ctrl.right {
-  right: 14px;
-}
-
-.slider:hover .ctrl {
-  background: rgba(8, 12, 22, 0.95);
-}
-
-/* Dots */
+/* Dots del slider */
 .dots {
   position: absolute;
   left: 0;
@@ -323,10 +431,10 @@ a {
 }
 
 .dot.active {
-  background: var(--accent-strong);
+  background: #f3d56d;
 }
 
-/* ================== PROJECT DETAIL PAGE ================== */
+/* ---------- PROJECT DETAIL PAGE ---------- */
 
 .detail {
   display: grid;
@@ -342,9 +450,12 @@ a {
 }
 
 .viewer {
-  background: radial-gradient(circle at top, #161d2c 0, #070a11 55%);
-  border-radius: 20px;
-  border: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(190deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.98) 28%),
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.18), transparent 60%),
+    linear-gradient(145deg, #1c0013, #050008 60%, #020005 100%);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   height: 520px;
   display: flex;
   align-items: center;
@@ -358,7 +469,6 @@ a {
   height: 100%;
 }
 
-/* Texto del detalle */
 #title {
   font-size: 26px;
   font-weight: 600;
@@ -369,14 +479,12 @@ a {
   color: var(--muted);
 }
 
-/* Galería dentro del detalle */
 #gallery.slider {
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  background: #05070c;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
-/* ================== RESPONSIVE AJUSTES EXTRAS ================== */
+/* ---------- Responsive extra ---------- */
 
 @media (max-width: 720px) {
   .nav {
@@ -392,200 +500,4 @@ a {
   .nav + p {
     margin-bottom: 20px;
   }
-}
-
-/* =========================================================
-   GRAFFITI ELEGANTE – VINOTINTO + DORADO
-   (Overrides de fondo, nav, cards, botones, chips, dots)
-   ========================================================= */
-
-/* Fondo tipo mural oscuro con sprays suaves */
-body {
-  background:
-    radial-gradient(circle at 5% 0%, rgba(180, 40, 90, 0.7), transparent 55%),
-    radial-gradient(circle at 95% 120%, rgba(192, 164, 90, 0.28), transparent 60%),
-    conic-gradient(from 220deg at 10% 80%, rgba(0, 255, 200, 0.06), transparent 45%, rgba(255, 120, 90, 0.08), transparent 70%),
-    linear-gradient(180deg, #15000a 0%, #050005 45%, #020104 100%);
-  background-attachment: fixed;
-  color: var(--ink);
-  position: relative;
-}
-
-/* Capa de ruido + manchas leves encima (textura “pared”) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  mix-blend-mode: soft-light;
-  opacity: 0.18; /* baja a 0.10 si te parece demasiado */
-  background-image:
-    /* manchas diagonales tipo pintura */
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.08) 0 8px,
-      transparent 8px 32px),
-    linear-gradient(215deg,
-      rgba(0, 0, 0, 0.4) 0 18px,
-      transparent 18px 40px),
-    /* ruido */
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
-  z-index: -1;
-}
-
-/* Segunda capa: “sprays” de color muy suaves */
-body::after {
-  content: "";
-  position: fixed;
-  inset: -10%;
-  pointer-events: none;
-  opacity: 0.22;
-  mix-blend-mode: screen;
-  background:
-    radial-gradient(circle at 18% 30%, rgba(255, 230, 160, 0.22), transparent 55%),
-    radial-gradient(circle at 78% 20%, rgba(90, 200, 255, 0.16), transparent 55%),
-    radial-gradient(circle at 40% 90%, rgba(255, 120, 150, 0.14), transparent 55%);
-  z-index: -1;
-}
-
-/* Nav: subrayado dorado + turquesa en vez de azul */
-.nav > div a::after {
-  background: linear-gradient(90deg, #c9af66, #4fd9d0);
-}
-
-/* ================== CARDS ================== */
-
-/* Panel oscuro con “spray” suave en la parte de arriba */
-.card {
-  background:
-    linear-gradient(190deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.9) 30%),
-    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.10), transparent 55%),
-    linear-gradient(150deg, #1a000c, #090007 60%, #040003 100%);
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow:
-    0 20px 46px rgba(0, 0, 0, 0.95),
-    0 0 0 1px rgba(0, 0, 0, 0.6);
-  overflow: hidden;
-}
-
-/* Borde superior como brillo de metal pintado */
-.card::before {
-  content: "";
-  position: absolute;
-  left: -10%;
-  right: -10%;
-  top: -2px;
-  height: 70px;
-  border-radius: 26px 26px 0 0;
-  background:
-    linear-gradient(180deg,
-      rgba(255, 255, 255, 0.22),
-      rgba(255, 255, 255, 0.0)),
-    linear-gradient(110deg,
-      rgba(201, 175, 102, 0.22),
-      rgba(79, 217, 208, 0.18),
-      transparent 70%);
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-/* Hover: profundidad + borde dorado, NADA azul */
-.card:hover,
-.card:focus,
-.card:focus-within {
-  transform: translateY(-4px);
-  border-color: rgba(255, 215, 130, 0.55);
-  box-shadow:
-    0 26px 68px rgba(0, 0, 0, 1),
-    0 0 26px rgba(255, 215, 130, 0.22);
-  background:
-    linear-gradient(185deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 35%),
-    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.16), transparent 60%),
-    linear-gradient(150deg, #22000f, #090007 60%, #040003 100%);
-}
-
-/* Slider ligeramente enmarcado dentro de la card */
-.slider {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  background: radial-gradient(circle at center, #310012 0%, #050004 80%);
-}
-
-/* ================== BOTONES ================== */
-
-/* Botón dorado con volumen y halo suave */
-.btn {
-  position: relative;
-  background: linear-gradient(135deg, #c9af66, #b18b3b);
-  color: #120b02;
-  border-radius: 999px;
-  border: 0;
-  padding: 9px 22px;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 18px 42px rgba(0, 0, 0, 0.95);
-  transition:
-    transform 0.14s ease-out,
-    box-shadow 0.14s ease-out,
-    filter 0.14s ease-out,
-    background 0.14s ease-out;
-}
-
-/* Highlight superior tipo metal satinado */
-.btn::after {
-  content: "";
-  position: absolute;
-  inset: 2px 3px 52%;
-  border-radius: inherit;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.55),
-    rgba(255, 255, 255, 0.0)
-  );
-  opacity: 0.45;
-  pointer-events: none;
-}
-
-/* Halo de spray alrededor del botón (muy suave) */
-.btn::before {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: inherit;
-  background: radial-gradient(circle at 50% 0%, rgba(255, 230, 160, 0.35), transparent 70%);
-  opacity: 0.0;
-  pointer-events: none;
-  transition: opacity 0.16s ease-out, filter 0.16s ease-out;
-}
-
-/* Hover: más brillo, sin cambiar de color */
-.btn:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.03);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.32),
-    0 24px 56px rgba(0, 0, 0, 0.98);
-}
-
-.btn:hover::before {
-  opacity: 1;
-  filter: blur(2px);
-}
-
-/* ================== CHIPS / TAGS ================== */
-
-.chip {
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.7));
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.75);
-}
-
-.chip:hover {
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.19), rgba(0, 0, 0, 0.75));
-  border-color: rgba(255, 215, 130, 0.7);
-}
-
-/* ================== DOTS DEL SLIDER ================== */
-
-.dot.active {
-  background: #d6b86a;  /* dorado suave, no azul */
 }
