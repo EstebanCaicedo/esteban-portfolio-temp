@@ -35,13 +35,17 @@
 
 html,
 body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* ÚNICO fondo: triángulos abstractos */
+body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
-
-  /* Fondo base oscuro */
   background-color: #05050a;
 
-  /* Triángulos abstractos usando gradientes diagonales */
   background-image:
     /* triángulo grande amarillo/naranja arriba izquierda */
     linear-gradient(
@@ -74,39 +78,7 @@ body {
     65% 65%,
     55% 55%,
     55% 55%;
-  
-  /* Para que el fondo no se mueva al hacer scroll */
   background-attachment: fixed;
-}
-
-
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--ink);
-
-  /* Pared con grafiti: mezclamos manchas, sprays y degradado oscuro */
-  background:
-    radial-gradient(circle at 8% 0%, rgba(255, 217, 90, 0.16), transparent 55%),
-    radial-gradient(circle at 95% 10%, rgba(255, 79, 132, 0.22), transparent 55%),
-    radial-gradient(circle at 5% 95%, rgba(70, 225, 212, 0.18), transparent 55%),
-    linear-gradient(160deg, #230019 0%, #070110 48%, #020106 100%);
-  background-attachment: fixed;
-  position: relative;
-}
-
-/* Sprays de color muy suaves encima */
-body::after {
-  content: "";
-  position: fixed;
-  inset: -10%;
-  pointer-events: none;
-  opacity: 0.25;
-  mix-blend-mode: screen;
-  background:
-    radial-gradient(circle at 15% 40%, rgba(255, 217, 90, 0.32), transparent 60%),
-    radial-gradient(circle at 70% 20%, rgba(255, 79, 132, 0.28), transparent 60%),
-    radial-gradient(circle at 85% 90%, rgba(139, 109, 255, 0.26), transparent 60%);
-  z-index: -1;
 }
 
 /* Links base */
