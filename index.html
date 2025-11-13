@@ -47,6 +47,17 @@
       v.playsInline=true;
       v.preload='metadata';
       v.setAttribute('disablepictureinpicture','');
+
+      // Controles al pasar el mouse
+      v.addEventListener('mouseenter', ()=>{
+        v.controls = true;
+        v.muted = false;
+      });
+      v.addEventListener('mouseleave', ()=>{
+        v.controls = false;
+        v.muted = true;
+      });
+
       return v;
     } else {
       const img=new Image();
@@ -65,6 +76,12 @@
     container.classList.add('slider');
     container.style.aspectRatio = '16 / 9';
     container.style.height = heightPx ? (heightPx+'px') : '';
+
+    if (!mediaPaths || !mediaPaths.length) {
+      container.classList.add('slider--empty');
+      container.innerHTML = '<div class="slider-empty-msg">No media available</div>';
+      return;
+    }
 
     const a=document.createElement('div'); a.className='slide-layer active';
     const b=document.createElement('div'); b.className='slide-layer';
@@ -132,12 +149,7 @@
       const head=document.createElement('div');
       card.appendChild(head);
       const media=[...(p.images||[]), ...(p.videos||[])];
-      if (media.length) {
-        mountMediaSlider(head, media, null, {autoplay:true});
-      } else {
-        head.classList.add('slider--empty');
-        head.innerHTML = '<div class="slider-empty-msg">No media available</div>';
-      }
+      mountMediaSlider(head, media, null, {autoplay:true});
 
       // body
       const body=document.createElement('div');
