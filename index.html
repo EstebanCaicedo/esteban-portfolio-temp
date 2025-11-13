@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Esteban Caicedo – Engineering Projects</title>
+  <title>Project – Esteban Caicedo</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,9 +15,19 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- 3D viewer (model-viewer) -->
+  <script
+    type="module"
+    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
+  <script
+    nomodule
+    src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js">
+  </script>
 </head>
 <body>
-  <!-- ===== Header / Nav ===== -->
+  <!-- ===== Header / Nav (mismo estilo que index) ===== -->
   <header class="site-header">
     <div class="container header-inner">
       <a href="index.html" class="logo">
@@ -26,8 +36,8 @@
       </a>
 
       <nav class="nav">
-        <a href="#projects" class="nav-link">Projects</a>
-        <a href="#experience" class="nav-link">Experience</a>
+        <a href="index.html#projects" class="nav-link">Projects</a>
+        <a href="index.html#experience" class="nav-link">Experience</a>
         <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" class="nav-link nav-link--primary">
           LinkedIn
         </a>
@@ -35,87 +45,57 @@
     </div>
   </header>
 
-  <main>
-    <!-- ===== Hero ===== -->
-    <section class="hero">
-      <div class="container hero-inner">
-        <!-- Left: visual surface / future live 3D -->
-        <div class="hero-media">
-          <div class="hero-media-surface">
-            <div class="hero-media-grid"></div>
-            <div class="hero-media-glow"></div>
-            <div class="hero-media-label">
-              <span class="dot"></span>
-              Real-time CAD preview slot
+  <main class="project-main">
+    <!-- Hero simple con título + tags -->
+    <section class="project-hero">
+      <div class="container">
+        <a href="index.html#projects" class="back-link">← Back to projects</a>
+
+        <h1 id="project-title" class="project-title">Loading…</h1>
+        <p id="project-description" class="project-subtitle"></p>
+
+        <div id="project-tags" class="project-tag-row"></div>
+      </div>
+    </section>
+
+    <!-- ===== Project detail layout ===== -->
+    <section class="project-detail">
+      <div class="container project-detail-grid">
+        <!-- Left: 3D viewer -->
+        <div class="project-viewer">
+          <div id="project-viewer-wrapper" class="project-viewer-inner">
+            <div class="project-viewer-placeholder">
+              No 3D model for this project yet.
             </div>
           </div>
         </div>
 
-        <!-- Right: intro text -->
-        <div class="hero-content">
-          <p class="eyebrow">CAD/CAE · Manufacturing · Composites · 3D Web</p>
-          <h1 class="hero-title">
-            Engineering Projects, <span>ready for real-time.</span>
-          </h1>
-          <p class="hero-subtitle">
-            Clean models, CAM-ready parts, and interactive 3D viewers you can drop straight into digital pipelines.
-          </p>
+        <!-- Right: description + gallery -->
+        <div class="project-info">
+          <p id="project-long" class="project-long"></p>
 
-          <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary">View Projects</a>
-            <a href="#" class="btn btn-ghost">Download Resume</a>
-          </div>
+          <div class="project-gallery" id="project-gallery">
+            <div class="gallery-header">
+              <span id="gallery-label">Gallery</span>
+            </div>
 
-          <div class="hero-meta">
-            <span>ARIES</span>
-            <span>WIMTACH</span>
-            <span>C-Bond</span>
-          </div>
-        </div>
-      </div>
+            <div class="gallery-frame">
+              <button class="gallery-nav gallery-nav--prev" type="button" aria-label="Previous">
+                ‹
+              </button>
 
-      <!-- Filters + Search -->
-      <div class="hero-toolbar">
-        <div class="container hero-toolbar-inner">
-          <div class="chip-group">
-            <button class="chip chip--active">All</button>
-            <button class="chip">CAD</button>
-            <button class="chip">Manufacturing</button>
-            <button class="chip">Sheetmetal</button>
-            <button class="chip">Surfaces</button>
-            <button class="chip">Assembly</button>
-          </div>
+              <div class="gallery-media-container" id="gallery-media-container">
+                <!-- media inject -->
+              </div>
 
-          <div class="search">
-            <input
-              type="search"
-              class="search-input"
-              placeholder="Search title, tags… (visual only for now)"
-            />
+              <button class="gallery-nav gallery-nav--next" type="button" aria-label="Next">
+                ›
+              </button>
+            </div>
+
+            <div class="gallery-dots" id="gallery-dots"></div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ===== Projects Grid ===== -->
-    <section id="projects" class="section">
-      <div class="container">
-        <header class="section-header">
-          <h2>Projects</h2>
-          <p>CAD practice parts, tooling, sheetmetal, and mechanisms – all with 3D viewers.</p>
-        </header>
-
-        <div id="project-grid" class="cards"></div>
-      </div>
-    </section>
-
-    <!-- (Optional) Experience anchor so el header no tenga link roto -->
-    <section id="experience" class="section section--placeholder">
-      <div class="container">
-        <h2>Experience</h2>
-        <p>
-          This section can later highlight ARIES / WIMTACH work, co-ops, and research projects.
-        </p>
       </div>
     </section>
   </main>
@@ -127,16 +107,20 @@
     </div>
   </footer>
 
-  <!-- ===== Projects loader (minimal cards) ===== -->
+  <!-- ===== Project loader script ===== -->
   <script>
-    /* Render minimal cards from projects.json (image/video + Open button) */
     (async () => {
-      const grid = document.getElementById('project-grid');
-      if (!grid) return;
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
 
-      grid.innerHTML = '<div style="opacity:.7;padding:12px;">Loading projects…</div>';
+      if (!slug) {
+        document.getElementById('project-title').textContent = 'Project not found';
+        document.getElementById('project-long').textContent =
+          'Missing project slug in URL.';
+        return;
+      }
 
-      // Carga robusta (evita problemas de ruta/hosting)
+      // Carga robusta de projects.json
       async function loadProjects() {
         const tries = ['projects.json', './projects.json', '/projects.json'];
         for (const url of tries) {
@@ -148,56 +132,134 @@
         throw new Error('projects.json not found');
       }
 
-      const projects = await loadProjects();
+      let project;
+      try {
+        const projects = await loadProjects();
+        project = projects.find(p => p.slug === slug);
+      } catch (err) {
+        document.getElementById('project-title').textContent = 'Error loading project';
+        document.getElementById('project-long').textContent = err.message;
+        return;
+      }
 
-      const makeCard = (p) => {
-        // 1) Media de portada (prioriza imagen; si no, 1er video; si no, placeholder)
-        const firstImg = (p.images || []).find(src => /\.(png|jpe?g|gif|webp)$/i.test(src));
-        const firstVid = (p.videos || [])[0];
+      if (!project) {
+        document.getElementById('project-title').textContent = 'Project not found';
+        document.getElementById('project-long').textContent =
+          'We could not find a project with this slug.';
+        return;
+      }
 
-        let mediaHTML = '';
-        if (firstImg) {
-          mediaHTML = `<img src="${firstImg}" alt="${p.title}" class="card__media" loading="lazy">`;
-        } else if (firstVid) {
-          mediaHTML = `
-            <video class="card__media" muted playsinline loop preload="metadata">
-              <source src="${firstVid}" type="video/mp4">
-            </video>`;
+      // ===== Rellenar texto básico =====
+      document.getElementById('project-title').textContent = project.title;
+      document.getElementById('project-description').textContent = project.description || '';
+      document.getElementById('project-long').textContent =
+        project.longDescription || '';
+
+      // Tags
+      const tagRow = document.getElementById('project-tags');
+      tagRow.innerHTML = (project.tags || [])
+        .map(t => `<span class="tag">${t}</span>`)
+        .join('');
+
+      // ===== 3D viewer =====
+      const viewerWrapper = document.getElementById('project-viewer-wrapper');
+      if (project.model) {
+        const mv = document.createElement('model-viewer');
+        mv.src = project.model;
+        mv.alt = project.title;
+        mv.setAttribute('camera-controls', '');
+        mv.setAttribute('auto-rotate', '');
+        mv.setAttribute('shadow-intensity', '0.7');
+        mv.setAttribute('exposure', '0.9');
+        mv.className = 'project-model';
+
+        viewerWrapper.innerHTML = '';
+        viewerWrapper.appendChild(mv);
+      }
+
+      // ===== Galería (imágenes + videos) =====
+      const galleryContainer = document.getElementById('gallery-media-container');
+      const dotsContainer = document.getElementById('gallery-dots');
+      const galleryLabel = document.getElementById('gallery-label');
+
+      // Separamos imágenes y videos; por si hay MP4s en "images"
+      const rawImages = (project.images || []);
+      const fromImagesVideos = rawImages
+        .filter(src => /\.mp4$/i.test(src))
+        .map(src => ({ type: 'video', src }));
+      const pureImages = rawImages
+        .filter(src => !/\.mp4$/i.test(src))
+        .map(src => ({ type: 'image', src }));
+
+      const explicitVideos = (project.videos || []).map(src => ({
+        type: 'video',
+        src
+      }));
+
+      const media = [...pureImages, ...explicitVideos, ...fromImagesVideos];
+
+      if (!media.length) {
+        galleryContainer.innerHTML =
+          '<div class="gallery-empty">No gallery items for this project yet.</div>';
+        galleryLabel.textContent = 'Gallery (0 items)';
+        return;
+      }
+
+      galleryLabel.textContent = `Gallery (${media.length} item${media.length > 1 ? 's' : ''})`;
+
+      let currentIndex = 0;
+
+      function renderMedia(index) {
+        const item = media[index];
+        let html = '';
+
+        if (item.type === 'image') {
+          html = `<img src="${item.src}" alt="${project.title} image ${index + 1}" class="gallery-media" loading="lazy">`;
         } else {
-          mediaHTML = `<div class="card__media card__media--empty">No preview</div>`;
+          html = `
+            <video class="gallery-media" controls preload="metadata">
+              <source src="${item.src}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>`;
         }
 
-        // 2) Tags
-        const tags = (p.tags || [])
-          .map(t => `<span class="tag">${t}</span>`)
+        galleryContainer.innerHTML = html;
+
+        // Dots
+        dotsContainer.innerHTML = media
+          .map((_, i) => `
+            <button type="button"
+              class="gallery-dot ${i === index ? 'gallery-dot--active' : ''}"
+              data-index="${i}">
+            </button>`)
           .join('');
+      }
 
-        // 3) Card
-        return `
-          <article class="card">
-            <div class="card__thumb">${mediaHTML}</div>
-            <div class="card__body">
-              <h3 class="card__title">${p.title}</h3>
-              <p class="card__desc">${p.description ?? ''}</p>
-              <div class="card__tags">${tags}</div>
-              <div class="card__cta">
-                <a class="btn btn-primary" href="project.html?slug=${encodeURIComponent(p.slug)}">Open</a>
-              </div>
-            </div>
-          </article>
-        `;
-      };
+      function goTo(delta) {
+        currentIndex = (currentIndex + delta + media.length) % media.length;
+        renderMedia(currentIndex);
+      }
 
-      grid.innerHTML = projects.map(makeCard).join('');
+      // Botones prev/next
+      document
+        .querySelector('.gallery-nav--prev')
+        .addEventListener('click', () => goTo(-1));
+      document
+        .querySelector('.gallery-nav--next')
+        .addEventListener('click', () => goTo(1));
 
-      // Autoplay silencioso en hover para videos de portada (opcional)
-      grid.querySelectorAll('video.card__media').forEach(v => {
-        v.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
-        v.addEventListener('mouseleave', () => {
-          v.pause();
-          v.currentTime = 0;
-        });
+      dotsContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.gallery-dot');
+        if (!btn) return;
+        const i = Number(btn.dataset.index);
+        if (!Number.isNaN(i)) {
+          currentIndex = i;
+          renderMedia(currentIndex);
+        }
       });
+
+      // Render inicial
+      renderMedia(currentIndex);
     })();
   </script>
 </body>
