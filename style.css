@@ -1,9 +1,7 @@
 /* ============================
-   GRAFFITI WALL THEME – v2
-   (index & project)
+   GRAFFITI WALL THEME – v2.1
    ============================ */
 
-/* ---------- Palette ---------- */
 :root {
   --wall-base: #050308;
   --wall-deep: #020106;
@@ -41,9 +39,6 @@ body {
 }
 
 body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   font-size: 15px;
@@ -52,30 +47,10 @@ body {
   background-color: #05030a;
 
   background-image:
-    linear-gradient(
-      135deg,
-      rgba(120, 0, 40, 0.95) 0%,
-      rgba(120, 0, 40, 0.95) 40%,
-      transparent 40%
-    ),
-    linear-gradient(
-      -135deg,
-      rgba(60, 0, 80, 0.9) 0%,
-      rgba(60, 0, 80, 0.9) 36%,
-      transparent 36%
-    ),
-    linear-gradient(
-      35deg,
-      rgba(0, 85, 95, 0.50) 0%,
-      rgba(0, 85, 95, 0.50) 28%,
-      transparent 28%
-    ),
-    linear-gradient(
-      -30deg,
-      rgba(210, 150, 60, 0.28) 0%,
-      rgba(210, 150, 60, 0.28) 24%,
-      transparent 24%
-    ),
+    linear-gradient(135deg, rgba(120, 0, 40, 0.95) 0%, rgba(120, 0, 40, 0.95) 40%, transparent 40%),
+    linear-gradient(-135deg, rgba(60, 0, 80, 0.9) 0%, rgba(60, 0, 80, 0.9) 36%, transparent 36%),
+    linear-gradient(35deg, rgba(0, 85, 95, 0.50) 0%, rgba(0, 85, 95, 0.50) 28%, transparent 28%),
+    linear-gradient(-30deg, rgba(210, 150, 60, 0.28) 0%, rgba(210, 150, 60, 0.28) 24%, transparent 24%),
     radial-gradient(circle at 50% 20%, rgba(0,0,0,0.65), transparent 65%);
   
   background-repeat: no-repeat;
@@ -166,9 +141,10 @@ a {
 
 .nav-links a {
   position: relative;
+  display: inline-block;
   font-size: 14px;
   padding-bottom: 4px;
-  opacity: 0.9;
+  opacity: 0.85;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -194,7 +170,15 @@ a {
   opacity: 1;
 }
 
-.nav-links a:hover::after,
+.nav-links a:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.nav-links a.active {
+  opacity: 1;
+}
+
 .nav-links a.active::after {
   transform: scaleX(1);
   opacity: 1;
@@ -243,7 +227,7 @@ a {
   }
 }
 
-/* ---------- CARDS (index) ---------- */
+/* ---------- CARDS ---------- */
 
 .card {
   position: relative;
@@ -265,7 +249,6 @@ a {
     background 0.16s ease-out;
 }
 
-/* Entrance animation */
 .card--fade-in {
   opacity: 0;
   transform: translateY(8px);
@@ -279,7 +262,6 @@ a {
   }
 }
 
-/* Top glow strip */
 .card::before {
   content: "";
   position: absolute;
@@ -338,7 +320,7 @@ a {
   overflow: hidden;
 }
 
-/* ---------- Tags / chips ---------- */
+/* ---------- Tags ---------- */
 
 .tags {
   display: flex;
@@ -372,7 +354,7 @@ a {
     0 0 16px rgba(255, 217, 90, 0.35);
 }
 
-/* ---------- Button "Open" ---------- */
+/* ---------- Button ---------- */
 
 .btn {
   position: relative;
@@ -444,7 +426,6 @@ a {
 }
 
 .slider::after {
-  /* ligera sombra en la parte inferior */
   content: "";
   position: absolute;
   inset: auto 0 0 0;
@@ -472,7 +453,6 @@ a {
   display: block;
 }
 
-/* Empty sliders (cuando no hay media) */
 .slider--empty {
   display: flex;
   align-items: center;
@@ -486,7 +466,6 @@ a {
   color: var(--muted);
 }
 
-/* Slider controls */
 .ctrl {
   position: absolute;
   top: 50%;
@@ -511,7 +490,6 @@ a {
 .ctrl.left { left: 14px; }
 .ctrl.right { right: 14px; }
 
-/* Dots */
 .dots {
   position: absolute;
   left: 0;
@@ -534,32 +512,35 @@ a {
   background: #f3d56d;
 }
 
-/* ---------- PROJECT DETAIL PAGE ---------- */
+/* ---------- PROJECT DETAIL ---------- */
+
+.detail-summary {
+  margin: 0;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 580px;
+}
 
 .detail {
   display: grid;
-  grid-template-columns: 1.1fr 0.95fr;
+  grid-template-columns: 1fr 1fr; /* simétrico */
   gap: 26px;
   margin-top: 16px;
 }
 
-.detail-right {
+.detail-media {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.detail-text {
-  margin: 0;
 }
 
 .detail-gallery {
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  min-height: 200px;
+  min-height: 520px; /* mismo alto que viewer */
 }
 
-/* 3D viewer container */
+/* 3D viewer */
 .viewer {
   background:
     linear-gradient(190deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.98) 28%),
@@ -586,15 +567,67 @@ a {
   font-size: 14px;
 }
 
-/* ---------- Responsive extra ---------- */
+/* ---------- LIGHTBOX ---------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 999;
+}
+
+.lightbox.open {
+  display: block;
+}
+
+.lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+}
+
+.lightbox-inner {
+  position: absolute;
+  inset: 5vh 8vw;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.lightbox-close {
+  align-self: flex-end;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.lightbox-content {
+  margin-top: 4px;
+  background: #050308;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.9);
+}
+
+/* ---------- Responsive ---------- */
 
 @media (max-width: 960px) {
   .detail {
     grid-template-columns: 1fr;
   }
 
-  .viewer {
+  .viewer,
+  .detail-gallery {
     height: 380px;
+    min-height: 380px;
+  }
+
+  .lightbox-inner {
+    inset: 6vh 4vw;
   }
 }
 
