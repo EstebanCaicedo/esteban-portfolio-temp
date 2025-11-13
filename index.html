@@ -32,7 +32,7 @@
       <div class="hero-grid">
         <!-- Panel izquierdo (slot para viewer futuro) -->
         <div class="hero-preview">
-          <!-- Lo podemos usar luego para un teaser 3D o imagen -->
+          <!-- Teaser 3D / imagen futura -->
         </div>
 
         <!-- Texto y CTA -->
@@ -64,9 +64,9 @@
         </div>
       </div>
 
-      <!-- Filtros visuales (All, CAD, Manufacturing, etc.) -->
+      <!-- Filtros visuales -->
       <div class="filter-row">
-        <button class="filter-pill" data-filter="all">All</button>
+        <button class="filter-pill filter-pill--active" data-filter="all">All</button>
         <button class="filter-pill" data-filter="CAD">CAD</button>
         <button class="filter-pill" data-filter="Manufacturing">Manufacturing</button>
         <button class="filter-pill" data-filter="Sheetmetal">Sheetmetal</button>
@@ -79,14 +79,14 @@
     <section id="projects" class="section-projects">
       <header class="section-header">
         <p class="section-kicker">PROJECTS</p>
-        <h2 class="section-title">CAD, tooling, sheetmetal & mechanisms</h2>
+        <h2 class="section-title">CAD, tooling, sheetmetal &amp; mechanisms</h2>
         <p class="section-subtitle">
           Practice parts and fixtures with real machining workflows and
           interactive 3D viewers.
         </p>
       </header>
 
-      <!-- Aquí el JS inserta todas las cards -->
+      <!-- Aquí se inyectan las cards desde JS -->
       <div id="projects-grid" class="project-grid"></div>
     </section>
   </main>
@@ -96,7 +96,159 @@
     © 2025 Esteban Caicedo · Built with TailwindCSS vibes &amp; Three.js style
   </footer>
 
-  <!-- Tu JS de siempre que carga projects.json y arma las cards -->
-  <script src="script.js"></script>
+  <!-- Script de detalle de proyecto (lo usas en project.html).
+       Aquí no hace falta incluirlo, así evitamos conflictos.
+       Si tu página de proyecto lo usa como <script src="script.js"></script>,
+       déjalo solo allí.
+  -->
+
+  <!-- Script específico para la grilla del index -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('projects-grid');
+      if (!grid) return;
+
+      // Filtros visuales
+      const filterPills = document.querySelectorAll('.filter-pill');
+
+      function setActiveFilter(filter) {
+        filterPills.forEach(pill => {
+          pill.classList.toggle('filter-pill--active', pill.dataset.filter === filter);
+        });
+      }
+
+      function applyFilter(filter, cards) {
+        cards.forEach(card => {
+          const tags = (card.dataset.tags || '').split(',');
+          if (filter === 'all' || tags.includes(filter)) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      fetch('projects.json')
+        .then(res => res.json())
+        .then(projects => {
+          const cards = [];
+
+          projects.forEach(project => {
+            const card = document.createElement('article');
+            card.className = 'project-card';
+            card.dataset.tags = (project.tags || []).join(',');
+
+            const mediaItems =
+              (project.images && project.images.length ? project.images : [])
+              .concat(project.videos && project.videos.length ? project.videos : []);
+
+            // ---------- Media / mini carrusel ----------
+            let mediaHtml = '';
+            if (mediaItems.length > 0) {
+              mediaHtml += '<div class="project-card-media">';
+              mediaHtml += '<div class="project-card-slides">';
+              mediaItems.forEach((src, index) => {
+                const isVideo = src.toLowerCase().endsWith('.mp4');
+                mediaHtml += `
+                  <div class="project-card-slide ${index === 0 ? 'is-active' : ''}">
+                    ${isVideo
+                      ? `<video src="${src}" muted loop playsinline></video>`
+                      : `<img src="${src}" alt="${project.title} preview ${index + 1}" />`
+                    }
+                  </div>
+                `;
+              });
+              mediaHtml += '</div>';
+
+              if (mediaItems.length > 1) {
+                mediaHtml += `
+                  <button class="carousel-nav-button prev" type="button" aria-label="Previous image">‹</button>
+                  <button class="carousel-nav-button next" type="button" aria-label="Next image">›</button>
+                  <div class="carousel-dots">
+                    ${mediaItems
+                      .map(
+                        (_, i) =>
+                          `<button class="carousel-dot ${i === 0 ? 'is-active' : ''}" data-index="${i}" type="button"></button>`
+                      )
+                      .join('')}
+                  </div>
+                `;
+              }
+
+              mediaHtml += '</div>'; // .project-card-media
+            } else {
+              mediaHtml += `
+                <div class="project-card-media project-card-media--empty">
+                  <span>No preview yet</span>
+                </div>
+              `;
+            }
+
+            const tagsHtml = (project.tags || [])
+              .map(tag => `<span class="project-tag">${tag}</span>`)
+              .join('');
+
+            card.innerHTML = `
+              ${mediaHtml}
+              <div class="project-card-body">
+                <h3 class="project-card-title">${project.title}</h3>
+                <p class="project-card-desc">${project.description}</p>
+                <div class="project-card-tags">${tagsHtml}</div>
+                <a class="project-card-btn" href="project.html?slug=${project.slug}">Open</a>
+              </div>
+            `;
+
+            // Configuramos el mini-carrusel de esta card
+            const slides = card.querySelectorAll('.project-card-slide');
+            const dots = card.querySelectorAll('.carousel-dot');
+            const prevBtn = card.querySelector('.carousel-nav-button.prev');
+            const nextBtn = card.querySelector('.carousel-nav-button.next');
+
+            if (slides.length > 1) {
+              let current = 0;
+
+              const goTo = (index) => {
+                current = (index + slides.length) % slides.length;
+                slides.forEach((slide, i) => {
+                  slide.classList.toggle('is-active', i === current);
+                });
+                dots.forEach((dot, i) => {
+                  dot.classList.toggle('is-active', i === current);
+                });
+              };
+
+              if (prevBtn) {
+                prevBtn.addEventListener('click', () => goTo(current - 1));
+              }
+              if (nextBtn) {
+                nextBtn.addEventListener('click', () => goTo(current + 1));
+              }
+              dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                  const i = Number(dot.dataset.index || 0);
+                  goTo(i);
+                });
+              });
+            }
+
+            grid.appendChild(card);
+            cards.push(card);
+          });
+
+          // Listeners de filtros
+          filterPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+              const filter = pill.dataset.filter || 'all';
+              setActiveFilter(filter);
+              applyFilter(filter, cards);
+            });
+          });
+        })
+        .catch(err => {
+          console.error('Error loading projects.json:', err);
+          grid.innerHTML = '<p style="opacity:0.7">Could not load projects.</p>';
+        });
+    });
+  </script>
 </body>
 </html>
