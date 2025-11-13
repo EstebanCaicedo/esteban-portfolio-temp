@@ -2,265 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project – Esteban Caicedo</title>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Styles -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Engineering Projects</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- 3D viewer (model-viewer) -->
-  <script
-    type="module"
-    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-  </script>
-  <script
-    nomodule
-    src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js">
-  </script>
 </head>
 <body>
-  <!-- ===== Header / Nav (mismo estilo que index) ===== -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="logo">
-        <span class="logo-mark"></span>
-        <span class="logo-text">Esteban <span>Caicedo</span></span>
-      </a>
-
-      <nav class="nav">
-        <a href="index.html#projects" class="nav-link">Projects</a>
-        <a href="index.html#experience" class="nav-link">Experience</a>
-        <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" class="nav-link nav-link--primary">
-          LinkedIn
-        </a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="project-main">
-    <!-- Hero simple con título + tags -->
-    <section class="project-hero">
-      <div class="container">
-        <a href="index.html#projects" class="back-link">← Back to projects</a>
-
-        <h1 id="project-title" class="project-title">Loading…</h1>
-        <p id="project-description" class="project-subtitle"></p>
-
-        <div id="project-tags" class="project-tag-row"></div>
+  <div class="container">
+    <div class="nav">
+      <h1 style="letter-spacing:.3px;margin:0;font-size:44px;line-height:1.05">
+        Engineering Projects
+      </h1>
+      <div style="display:flex;gap:18px">
+        <a href="index.html">Projects</a>
+        <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/" target="_blank" rel="noreferrer">LinkedIn</a>
       </div>
-    </section>
-
-    <!-- ===== Project detail layout ===== -->
-    <section class="project-detail">
-      <div class="container project-detail-grid">
-        <!-- Left: 3D viewer -->
-        <div class="project-viewer">
-          <div id="project-viewer-wrapper" class="project-viewer-inner">
-            <div class="project-viewer-placeholder">
-              No 3D model for this project yet.
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: description + gallery -->
-        <div class="project-info">
-          <p id="project-long" class="project-long"></p>
-
-          <div class="project-gallery" id="project-gallery">
-            <div class="gallery-header">
-              <span id="gallery-label">Gallery</span>
-            </div>
-
-            <div class="gallery-frame">
-              <button class="gallery-nav gallery-nav--prev" type="button" aria-label="Previous">
-                ‹
-              </button>
-
-              <div class="gallery-media-container" id="gallery-media-container">
-                <!-- media inject -->
-              </div>
-
-              <button class="gallery-nav gallery-nav--next" type="button" aria-label="Next">
-                ›
-              </button>
-            </div>
-
-            <div class="gallery-dots" id="gallery-dots"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ===== Footer ===== -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>© 2025 Esteban Caicedo · Built with vanilla HTML/CSS &amp; Three.js · Toronto</p>
     </div>
-  </footer>
 
-  <!-- ===== Project loader script ===== -->
+    <p style="margin:6px 0 28px;opacity:.8">
+      Portfolio with CAD/CAE projects, interactive 3D models, and mixed-media galleries.
+    </p>
+
+    <div id="grid" class="grid"></div>
+  </div>
+
   <script>
-    (async () => {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get('slug');
+  // ---------- utils ----------
+  const isVideo = (src)=>/\.(mp4|webm|ogg)$/i.test(src);
 
-      if (!slug) {
-        document.getElementById('project-title').textContent = 'Project not found';
-        document.getElementById('project-long').textContent =
-          'Missing project slug in URL.';
-        return;
-      }
+  function makeMediaEl(src) {
+    if (isVideo(src)) {
+      const v=document.createElement('video');
+      v.src=src; v.muted=true; v.loop=true; v.autoplay=true; v.playsInline=true; v.preload='metadata';
+      v.setAttribute('disablepictureinpicture','');
+      return v;
+    } else {
+      const img=new Image(); img.src=src; img.loading='lazy'; img.alt='';
+      return img;
+    }
+  }
 
-      // Carga robusta de projects.json
-      async function loadProjects() {
-        const tries = ['projects.json', './projects.json', '/projects.json'];
-        for (const url of tries) {
-          try {
-            const res = await fetch(url, { cache: 'no-store' });
-            if (res.ok) return res.json();
-          } catch (_) {}
-        }
-        throw new Error('projects.json not found');
-      }
+  function mountMediaSlider(container, mediaPaths, heightPx, opts) {
+    opts=opts||{}; const autoplay = opts.autoplay!==false; const interval = opts.interval||3000;
 
-      let project;
-      try {
-        const projects = await loadProjects();
-        project = projects.find(p => p.slug === slug);
-      } catch (err) {
-        document.getElementById('project-title').textContent = 'Error loading project';
-        document.getElementById('project-long').textContent = err.message;
-        return;
-      }
+    container.classList.add('slider');
+    container.style.aspectRatio = '16 / 9';        // coherente v2.6.0
+    container.style.height = heightPx ? (heightPx+'px') : '';
 
-      if (!project) {
-        document.getElementById('project-title').textContent = 'Project not found';
-        document.getElementById('project-long').textContent =
-          'We could not find a project with this slug.';
-        return;
-      }
+    const a=document.createElement('div'); a.className='slide-layer active';
+    const b=document.createElement('div'); b.className='slide-layer';
+    let useA=true, idx=0, timer=null;
 
-      // ===== Rellenar texto básico =====
-      document.getElementById('project-title').textContent = project.title;
-      document.getElementById('project-description').textContent = project.description || '';
-      document.getElementById('project-long').textContent =
-        project.longDescription || '';
+    a.appendChild(makeMediaEl(mediaPaths[0]||'')); 
+    b.appendChild(makeMediaEl(mediaPaths[1]||mediaPaths[0]||''));
+    container.append(a,b);
 
-      // Tags
-      const tagRow = document.getElementById('project-tags');
-      tagRow.innerHTML = (project.tags || [])
-        .map(t => `<span class="tag">${t}</span>`)
-        .join('');
+    const left=document.createElement('div'); left.className='ctrl left'; left.textContent='‹';
+    const right=document.createElement('div'); right.className='ctrl right'; right.textContent='›';
+    container.append(left,right);
 
-      // ===== 3D viewer =====
-      const viewerWrapper = document.getElementById('project-viewer-wrapper');
-      if (project.model) {
-        const mv = document.createElement('model-viewer');
-        mv.src = project.model;
-        mv.alt = project.title;
-        mv.setAttribute('camera-controls', '');
-        mv.setAttribute('auto-rotate', '');
-        mv.setAttribute('shadow-intensity', '0.7');
-        mv.setAttribute('exposure', '0.9');
-        mv.className = 'project-model';
+    let dots=null;
+    if (mediaPaths.length>1) {
+      dots=document.createElement('div'); dots.className='dots';
+      mediaPaths.forEach((_,i)=>{ const d=document.createElement('span'); d.className='dot'+(i===0?' active':''); d.onclick=()=>show(i); dots.appendChild(d); });
+      container.appendChild(dots);
+    }
 
-        viewerWrapper.innerHTML = '';
-        viewerWrapper.appendChild(mv);
-      }
+    function show(nextIndex){
+      idx=(nextIndex+mediaPaths.length)%mediaPaths.length;
+      const target=(useA?b:a); target.innerHTML=''; target.appendChild(makeMediaEl(mediaPaths[idx]||''));
+      (useA?a:b).classList.remove('active'); (useA?b:a).classList.add('active'); useA=!useA;
+      if(dots){ dots.childNodes.forEach((d,i)=>d.className='dot'+(i===idx?' active':'')); }
+    }
+    left.onclick=()=>show(idx-1); right.onclick=()=>show(idx+1);
 
-      // ===== Galería (imágenes + videos) =====
-      const galleryContainer = document.getElementById('gallery-media-container');
-      const dotsContainer = document.getElementById('gallery-dots');
-      const galleryLabel = document.getElementById('gallery-label');
+    function start(){ if(autoplay && mediaPaths.length>1) timer=setInterval(()=>show(idx+1), interval); }
+    function stop(){ if(timer){clearInterval(timer); timer=null;} }
+    container.addEventListener('mouseenter',stop); container.addEventListener('mouseleave',start);
+    start();
+  }
 
-      // Separamos imágenes y videos; por si hay MP4s en "images"
-      const rawImages = (project.images || []);
-      const fromImagesVideos = rawImages
-        .filter(src => /\.mp4$/i.test(src))
-        .map(src => ({ type: 'video', src }));
-      const pureImages = rawImages
-        .filter(src => !/\.mp4$/i.test(src))
-        .map(src => ({ type: 'image', src }));
+  // ---------- render ----------
+  async function renderCards() {
+    const res = await fetch('projects.json', {cache:'no-store'});
+    const projects = await res.json();
+    const grid = document.getElementById('grid');
+    grid.innerHTML='';
 
-      const explicitVideos = (project.videos || []).map(src => ({
-        type: 'video',
-        src
-      }));
+    projects.forEach(p=>{
+      const card=document.createElement('div'); card.className='card';
 
-      const media = [...pureImages, ...explicitVideos, ...fromImagesVideos];
+      // header
+      const head=document.createElement('div');
+      card.appendChild(head);
+      const media=[...(p.images||[]), ...(p.videos||[])];
+      mountMediaSlider(head, media, null, {autoplay:true});
 
-      if (!media.length) {
-        galleryContainer.innerHTML =
-          '<div class="gallery-empty">No gallery items for this project yet.</div>';
-        galleryLabel.textContent = 'Gallery (0 items)';
-        return;
-      }
+      // body
+      const body=document.createElement('div'); body.className='card-body';
+      body.innerHTML = `
+        <h3 class="h3">${p.title}</h3>
+        <p class="p-sm">${p.description||''}</p>
+        <div class="tags" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px">
+          ${(p.tags||[]).map(t=>`<span class="chip">${t}</span>`).join('')}
+        </div>
+        <a class="btn" href="project.html?slug=${encodeURIComponent(p.slug)}">Open</a>
+      `;
+      card.appendChild(body);
 
-      galleryLabel.textContent = `Gallery (${media.length} item${media.length > 1 ? 's' : ''})`;
+      grid.appendChild(card);
+    });
+  }
 
-      let currentIndex = 0;
-
-      function renderMedia(index) {
-        const item = media[index];
-        let html = '';
-
-        if (item.type === 'image') {
-          html = `<img src="${item.src}" alt="${project.title} image ${index + 1}" class="gallery-media" loading="lazy">`;
-        } else {
-          html = `
-            <video class="gallery-media" controls preload="metadata">
-              <source src="${item.src}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>`;
-        }
-
-        galleryContainer.innerHTML = html;
-
-        // Dots
-        dotsContainer.innerHTML = media
-          .map((_, i) => `
-            <button type="button"
-              class="gallery-dot ${i === index ? 'gallery-dot--active' : ''}"
-              data-index="${i}">
-            </button>`)
-          .join('');
-      }
-
-      function goTo(delta) {
-        currentIndex = (currentIndex + delta + media.length) % media.length;
-        renderMedia(currentIndex);
-      }
-
-      // Botones prev/next
-      document
-        .querySelector('.gallery-nav--prev')
-        .addEventListener('click', () => goTo(-1));
-      document
-        .querySelector('.gallery-nav--next')
-        .addEventListener('click', () => goTo(1));
-
-      dotsContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.gallery-dot');
-        if (!btn) return;
-        const i = Number(btn.dataset.index);
-        if (!Number.isNaN(i)) {
-          currentIndex = i;
-          renderMedia(currentIndex);
-        }
-      });
-
-      // Render inicial
-      renderMedia(currentIndex);
-    })();
+  document.addEventListener('DOMContentLoaded', renderCards);
   </script>
 </body>
 </html>

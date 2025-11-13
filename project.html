@@ -1,270 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project – Esteban Caicedo</title>
-
-  <!-- Fonts (mismas que index) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Visor de GLB sencillo -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Project</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- ===== Header / Nav (igual que index) ===== -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="logo">
-        <span class="logo-mark"></span>
-        <span class="logo-text">Esteban <span>Caicedo</span></span>
-      </a>
-
-      <nav class="nav">
-        <a href="index.html#projects" class="nav-link">Projects</a>
-        <a href="index.html#experience" class="nav-link">Experience</a>
-        <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" class="nav-link nav-link--primary">
-          LinkedIn
-        </a>
-      </nav>
+  <div class="container">
+    <div class="nav">
+      <a href="index.html">← Back</a>
+      <div style="display:flex;gap:18px">
+        <a href="index.html">Projects</a>
+        <a href="https://www.linkedin.com/in/esteban-caicedo/" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
     </div>
-  </header>
 
-  <main class="project-page">
-    <section class="section">
-      <div class="container project-header">
-        <a href="index.html#projects" class="back-link">← Back to projects</a>
-        <h1 id="project-title">Loading…</h1>
-        <p id="project-subtitle" class="project-subtitle"></p>
-        <div id="project-tags" class="project-tags"></div>
+    <div id="title" style="font-size:28px;font-weight:700;margin:8px 0 18px"></div>
+
+    <div class="detail">
+      <!-- 3D viewer -->
+      <div class="viewer" id="viewer">
+        <!-- Si no se puede cargar el model, se mostrará un mensaje -->
       </div>
 
-      <div class="container project-layout">
-        <!-- Columna izquierda: visor 3D -->
-        <div class="project-3d" id="project-3d">
-          <div class="project-3d-inner" id="project-3d-inner">
-            <!-- Se rellena por JS -->
-          </div>
-        </div>
-
-        <!-- Columna derecha: descripción + carrusel -->
-        <div class="project-right">
-          <p id="project-long" class="project-long"></p>
-
-          <div class="project-gallery">
-            <header class="project-gallery-header">
-              <span id="gallery-title">Gallery</span>
-              <span id="gallery-count" class="project-gallery-count"></span>
-            </header>
-
-            <div class="carousel" id="carousel">
-              <button class="carousel-nav carousel-nav--prev" id="carousel-prev" aria-label="Previous">
-                ‹
-              </button>
-
-              <div class="carousel-main">
-                <div class="carousel-media-wrapper" id="carousel-media">
-                  <!-- item actual (img o video) -->
-                </div>
-              </div>
-
-              <button class="carousel-nav carousel-nav--next" id="carousel-next" aria-label="Next">
-                ›
-              </button>
-            </div>
-
-            <div class="carousel-dots" id="carousel-dots">
-              <!-- bullets -->
-            </div>
-          </div>
-        </div>
+      <!-- description + gallery -->
+      <div>
+        <p id="long" class="p-sm" style="margin:6px 0 18px"></p>
+        <div id="gallery" class="slider" style="aspect-ratio:16/9"></div>
       </div>
-    </section>
-  </main>
-
-  <!-- ===== Footer ===== -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>© 2025 Esteban Caicedo · Built with vanilla HTML/CSS &amp; Three.js · Toronto</p>
     </div>
-  </footer>
+  </div>
 
-  <!-- ===== Lógica de proyecto ===== -->
   <script>
-    (async () => {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get("slug");
+  // ====== same helpers as index ======
+  const isVideo=(src)=>/\.(mp4|webm|ogg)$/i.test(src);
+  function makeMediaEl(src){
+    if(isVideo(src)){const v=document.createElement('video');v.src=src;v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='metadata';v.setAttribute('disablepictureinpicture','');return v;}
+    const img=new Image();img.src=src;img.alt='';img.loading='lazy';return img;
+  }
+  function mountMediaSlider(container, mediaPaths, heightPx, opts){
+    opts=opts||{}; const autoplay=opts.autoplay!==false; const interval=opts.interval||3000;
+    container.classList.add('slider'); if(heightPx) container.style.height=heightPx+'px';
+    const a=document.createElement('div');a.className='slide-layer active';
+    const b=document.createElement('div');b.className='slide-layer';
+    let useA=true, idx=0, timer=null;
+    a.appendChild(makeMediaEl(mediaPaths[0]||'')); b.appendChild(makeMediaEl(mediaPaths[1]||mediaPaths[0]||'')); container.append(a,b);
+    const left=document.createElement('div'); left.className='ctrl left'; left.textContent='‹';
+    const right=document.createElement('div'); right.className='ctrl right'; right.textContent='›';
+    container.append(left,right);
+    let dots=null;
+    if(mediaPaths.length>1){
+      dots=document.createElement('div');dots.className='dots';
+      mediaPaths.forEach((_,i)=>{const d=document.createElement('span');d.className='dot'+(i===0?' active':'');d.onclick=()=>show(i);dots.appendChild(d);});
+      container.appendChild(dots);
+    }
+    function show(nextIndex){
+      idx=(nextIndex+mediaPaths.length)%mediaPaths.length;
+      const target=(useA?b:a); target.innerHTML=''; target.appendChild(makeMediaEl(mediaPaths[idx]||''));
+      (useA?a:b).classList.remove('active'); (useA?b:a).classList.add('active'); useA=!useA;
+      if(dots){dots.childNodes.forEach((d,i)=>d.className='dot'+(i===idx?' active':''));}
+    }
+    left.onclick=()=>show(idx-1); right.onclick=()=>show(idx+1);
+    function start(){ if(autoplay && mediaPaths.length>1) timer=setInterval(()=>show(idx+1), interval); }
+    function stop(){ if(timer){clearInterval(timer); timer=null;} }
+    container.addEventListener('mouseenter',stop); container.addEventListener('mouseleave',start);
+    start();
+  }
 
-      const titleEl   = document.getElementById("project-title");
-      const subtitleEl = document.getElementById("project-subtitle");
-      const tagsEl    = document.getElementById("project-tags");
-      const longEl    = document.getElementById("project-long");
+  // ====== very light 3D viewer (model-viewer fallback-free) ======
+  // Usamos <model-viewer> si está disponible; si no, mostramos texto.
+  function mountModel(container, src) {
+    if (!src) { container.innerHTML='<div style="opacity:.7">No 3D model.</div>'; return; }
 
-      const viewerContainer = document.getElementById("project-3d-inner");
-      const galleryTitleEl  = document.getElementById("gallery-title");
-      const galleryCountEl  = document.getElementById("gallery-count");
-      const mediaWrapperEl  = document.getElementById("carousel-media");
-      const dotsEl          = document.getElementById("carousel-dots");
-      const prevBtn         = document.getElementById("carousel-prev");
-      const nextBtn         = document.getElementById("carousel-next");
+    // Intento con <model-viewer> (si el browser lo soporta o ya lo tenías)
+    const tag = document.createElement('model-viewer');
+    tag.setAttribute('src', src);
+    tag.setAttribute('camera-controls','');
+    tag.setAttribute('auto-rotate','');
+    tag.setAttribute('exposure','1.0');
+    tag.style.width='100%'; tag.style.height='100%';
+    tag.addEventListener('error', ()=> { container.innerHTML='<div style="opacity:.7">Model preview not available.</div>'; });
+    container.innerHTML=''; container.appendChild(tag);
 
-      // Mensaje base si algo va mal
-      function showNotFound(reason) {
-        titleEl.textContent = "Project not found";
-        subtitleEl.textContent = reason || "Missing project slug in URL.";
-        longEl.textContent = "";
-        viewerContainer.innerHTML =
-          '<div class="project-3d-placeholder">No 3D model for this project yet.</div>';
-        galleryTitleEl.textContent = "Gallery";
-        galleryCountEl.textContent = "";
-        mediaWrapperEl.innerHTML = "";
-        dotsEl.innerHTML = "";
-      }
+    // Carga del script solo si no existe
+    if (!customElements.get('model-viewer')) {
+      const s=document.createElement('script');
+      s.type='module';
+      s.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
+      document.head.appendChild(s);
+    }
+  }
 
-      if (!slug) {
-        showNotFound("Missing project slug in URL.");
-        return;
-      }
+  // ====== load & render ======
+  (async function(){
+    const params=new URLSearchParams(location.search);
+    const slug=params.get('slug');
 
-      // Carga robusta del JSON (igual enfoque que en index)
-      async function loadProjects() {
-        const tries = ["projects.json", "./projects.json", "/projects.json"];
-        for (const url of tries) {
-          try {
-            const res = await fetch(url, { cache: "no-store" });
-            if (res.ok) return res.json();
-          } catch (e) {}
-        }
-        throw new Error("projects.json not found");
-      }
+    const res=await fetch('projects.json',{cache:'no-store'});
+    const list=await res.json();
+    const p=list.find(x=>x.slug===slug) || list[0];
 
-      let projects;
-      try {
-        projects = await loadProjects();
-      } catch (e) {
-        showNotFound("Could not load projects.json.");
-        return;
-      }
+    document.getElementById('title').textContent = p.title || 'Project';
+    document.getElementById('long').textContent  = p.longDescription || '';
 
-      const project = projects.find(p => p.slug === slug);
-      if (!project) {
-        showNotFound("No project matches slug: " + slug);
-        return;
-      }
+    // viewer
+    mountModel(document.getElementById('viewer'), p.model || '');
 
-      // ===== Rellenar texto =====
-      titleEl.textContent = project.title || "Untitled project";
-      subtitleEl.textContent = project.description || "";
-      longEl.textContent = project.longDescription || "";
-
-      tagsEl.innerHTML = (project.tags || [])
-        .map(t => `<span class="tag">${t}</span>`)
-        .join("");
-
-      // ===== Visor 3D =====
-      viewerContainer.innerHTML = "";
-      if (project.model) {
-        const mv = document.createElement("model-viewer");
-        mv.setAttribute("src", project.model);
-        mv.setAttribute("alt", project.title || "3D model");
-        mv.setAttribute("camera-controls", "");
-        mv.setAttribute("auto-rotate", "");
-        mv.setAttribute("shadow-intensity", "0.6");
-        mv.setAttribute("exposure", "1.0");
-        mv.className = "project-model-viewer";
-        viewerContainer.appendChild(mv);
-      } else {
-        viewerContainer.innerHTML =
-          '<div class="project-3d-placeholder">No 3D model for this project yet.</div>';
-      }
-
-      // ===== Galería (imágenes + videos) =====
-      const mediaItems = [];
-
-      if (Array.isArray(project.images)) {
-        project.images.forEach(src => {
-          mediaItems.push({ type: "image", src });
-        });
-      }
-      if (Array.isArray(project.videos)) {
-        project.videos.forEach(src => {
-          mediaItems.push({ type: "video", src });
-        });
-      }
-
-      if (!mediaItems.length) {
-        galleryTitleEl.textContent = "Gallery";
-        galleryCountEl.textContent = "(no media)";
-        mediaWrapperEl.innerHTML =
-          '<div class="carousel-empty">No images or videos for this project yet.</div>';
-        dotsEl.innerHTML = "";
-        prevBtn.disabled = true;
-        nextBtn.disabled = true;
-        return;
-      }
-
-      let currentIndex = 0;
-
-      function renderMedia() {
-        const item = mediaItems[currentIndex];
-        galleryTitleEl.textContent = "Gallery";
-        galleryCountEl.textContent = `${currentIndex + 1} / ${mediaItems.length}`;
-
-        if (item.type === "image") {
-          mediaWrapperEl.innerHTML = `
-            <img src="${item.src}" alt="${project.title}" class="carousel-media" loading="lazy">
-          `;
-        } else {
-          mediaWrapperEl.innerHTML = `
-            <video class="carousel-media" controls playsinline>
-              <source src="${item.src}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          `;
-        }
-
-        dotsEl.querySelectorAll(".carousel-dot").forEach((dot, i) => {
-          dot.classList.toggle("carousel-dot--active", i === currentIndex);
-        });
-      }
-
-      function buildDots() {
-        dotsEl.innerHTML = mediaItems
-          .map(
-            (_, i) =>
-              `<button class="carousel-dot" data-index="${i}" aria-label="Go to item ${i + 1}"></button>`
-          )
-          .join("");
-
-        dotsEl.querySelectorAll(".carousel-dot").forEach(btn => {
-          btn.addEventListener("click", () => {
-            currentIndex = Number(btn.dataset.index);
-            renderMedia();
-          });
-        });
-      }
-
-      buildDots();
-      renderMedia();
-
-      prevBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
-        renderMedia();
-      });
-
-      nextBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex + 1) % mediaItems.length;
-        renderMedia();
-      });
-    })();
+    // gallery (images + videos)
+    const media=[...(p.images||[]), ...(p.videos||[])];
+    mountMediaSlider(document.getElementById('gallery'), media, 0, {autoplay:true});
+  })();
   </script>
 </body>
 </html>
