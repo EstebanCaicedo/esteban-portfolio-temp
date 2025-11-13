@@ -71,26 +71,26 @@
   // ====== very light 3D viewer (model-viewer fallback-free) ======
   // Usamos <model-viewer> si está disponible; si no, mostramos texto.
   function mountModel(container, src) {
-  if (!src) { container.innerHTML='<div style="opacity:.7">No 3D model.</div>'; return; }
+    if (!src) { container.innerHTML='<div style="opacity:.7">No 3D model.</div>'; return; }
 
-  const tag = document.createElement('model-viewer');
-  tag.className = 'viewer-model';
-  tag.setAttribute('src', src);
-  tag.setAttribute('camera-controls','');
-  tag.setAttribute('auto-rotate','');
-  tag.setAttribute('exposure','1.0');
-  tag.style.width='100%'; tag.style.height='100%';
-  tag.addEventListener('error', ()=> { container.innerHTML='<div style="opacity:.7">Model preview not available.</div>'; });
-  container.innerHTML=''; container.appendChild(tag);
+    // Intento con <model-viewer> (si el browser lo soporta o ya lo tenías)
+    const tag = document.createElement('model-viewer');
+    tag.setAttribute('src', src);
+    tag.setAttribute('camera-controls','');
+    tag.setAttribute('auto-rotate','');
+    tag.setAttribute('exposure','1.0');
+    tag.style.width='100%'; tag.style.height='100%';
+    tag.addEventListener('error', ()=> { container.innerHTML='<div style="opacity:.7">Model preview not available.</div>'; });
+    container.innerHTML=''; container.appendChild(tag);
 
-  if (!customElements.get('model-viewer')) {
-    const s=document.createElement('script');
-    s.type='module';
-    s.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
-    document.head.appendChild(s);
+    // Carga del script solo si no existe
+    if (!customElements.get('model-viewer')) {
+      const s=document.createElement('script');
+      s.type='module';
+      s.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
+      document.head.appendChild(s);
+    }
   }
-}
-
 
   // ====== load & render ======
   (async function(){

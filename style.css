@@ -56,25 +56,3 @@ a{color:inherit;text-decoration:none}
 @media(max-width:960px){.detail{grid-template-columns:1fr;}}
 .viewer{background:rgba(255,255,255,.03);border-radius:18px;border:1px solid var(--ring);height:520px;display:flex;align-items:center;justify-content:center}
 .viewer canvas{width:100%;height:100%}
-/* ===== Project detail tweaks (v2.6.5 fix) ===== */
-
-/* Asegura que el model-viewer use todo el espacio del viewer */
-.viewer model-viewer,
-.viewer .viewer-model {
-  width: 100%;
-  height: 100%;
-}
-
-/* En la página de detalle, que la galería no sea absurda de grande */
-.detail .slider {
-  max-height: 360px;
-  aspect-ratio: 16 / 9;
-}
-
-/* En la página de detalle, queremos ver la pieza completa,
-   no recortada como fondo de portada */
-.detail .slide-layer img,
-.detail .slide-layer video {
-  object-fit: contain;
-  background: #0b1220;
-}
