@@ -2,203 +2,229 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Esteban Caicedo – Engineering Projects</title>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Styles -->
+  <title>Project – Esteban Caicedo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
+
+  <!-- model-viewer para los .glb -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
-  <!-- ===== Header / Nav ===== -->
+  <!-- NAV SIMPLE / CONSISTENTE CON EL INDEX -->
   <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="logo">
-        <span class="logo-mark"></span>
-        <span class="logo-text">Esteban <span>Caicedo</span></span>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="nav-dot"></span>
+        <span class="nav-name">Esteban <span class="nav-last">Caicedo</span></span>
       </a>
-
-      <nav class="nav">
-        <a href="#projects" class="nav-link">Projects</a>
-        <a href="#experience" class="nav-link">Experience</a>
-        <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" class="nav-link nav-link--primary">
-          LinkedIn
-        </a>
+      <nav class="nav-links">
+        <a href="index.html#projects" class="nav-link">Projects</a>
+        <a href="#" class="nav-link nav-link--muted">Experience</a>
+        <a href="https://www.linkedin.com/in/esteban-caicedo-ec" target="_blank" rel="noreferrer" class="nav-cta">LinkedIn</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <!-- ===== Hero ===== -->
-    <section class="hero">
-      <div class="container hero-inner">
-        <!-- Left: visual surface / future live 3D -->
-        <div class="hero-media">
-          <div class="hero-media-surface">
-            <div class="hero-media-grid"></div>
-            <div class="hero-media-glow"></div>
-            <div class="hero-media-label">
-              <span class="dot"></span>
-              Real-time CAD preview slot
-            </div>
-          </div>
-        </div>
+  <main class="project-page">
+    <!-- fila back / título -->
+    <div class="project-header-row">
+      <a href="index.html#projects" class="project-back-link">
+        <span>←</span>
+        <span>Back to projects</span>
+      </a>
+      <div class="project-header-text">
+        <h1 id="project-title" class="project-title">Project title</h1>
+        <p id="project-short" class="project-short">Short description.</p>
+        <div id="project-tags" class="project-tags"></div>
+      </div>
+    </div>
 
-        <!-- Right: intro text -->
-        <div class="hero-content">
-          <p class="eyebrow">CAD/CAE · Manufacturing · Composites · 3D Web</p>
-          <h1 class="hero-title">
-            Engineering Projects, <span>ready for real-time.</span>
-          </h1>
-          <p class="hero-subtitle">
-            Clean models, CAM-ready parts, and interactive 3D viewers you can drop straight into digital pipelines.
-          </p>
-
-          <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary">View Projects</a>
-            <a href="#" class="btn btn-ghost">Download Resume</a>
-          </div>
-
-          <div class="hero-meta">
-            <span>ARIES</span>
-            <span>WIMTACH</span>
-            <span>C-Bond</span>
-          </div>
+    <!-- layout principal -->
+    <section class="project-main">
+      <!-- viewer 3D -->
+      <div class="project-viewer-card">
+        <model-viewer id="project-viewer"
+          src=""
+          alt="3D model"
+          camera-controls
+          auto-rotate
+          autoplay
+          exposure="0.9"
+          shadow-intensity="0.8"
+          style="width:100%;height:100%;">
+        </model-viewer>
+        <div id="viewer-placeholder" class="project-viewer-placeholder hidden">
+          <p>No 3D model for this project yet.</p>
         </div>
       </div>
 
-      <!-- Filters + Search -->
-      <div class="hero-toolbar">
-        <div class="container hero-toolbar-inner">
-          <div class="chip-group">
-            <button class="chip chip--active">All</button>
-            <button class="chip">CAD</button>
-            <button class="chip">Manufacturing</button>
-            <button class="chip">Sheetmetal</button>
-            <button class="chip">Surfaces</button>
-            <button class="chip">Assembly</button>
-          </div>
-
-          <div class="search">
-            <input
-              type="search"
-              class="search-input"
-              placeholder="Search title, tags… (visual only for now)"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Projects Grid ===== -->
-    <section id="projects" class="section">
-      <div class="container">
-        <header class="section-header">
-          <h2>Projects</h2>
-          <p>CAD practice parts, tooling, sheetmetal, and mechanisms – all with 3D viewers.</p>
-        </header>
-
-        <div id="project-grid" class="cards"></div>
-      </div>
-    </section>
-
-    <!-- (Optional) Experience anchor so el header no tenga link roto -->
-    <section id="experience" class="section section--placeholder">
-      <div class="container">
-        <h2>Experience</h2>
-        <p>
-          This section can later highlight ARIES / WIMTACH work, co-ops, and research projects.
+      <!-- info + galería -->
+      <div class="project-info-card">
+        <p id="project-long" class="project-long">
+          Long description placeholder.
         </p>
+
+        <div class="project-media">
+          <div class="project-media-header">
+            <span class="project-media-title">Gallery</span>
+            <span id="project-media-count" class="project-media-count"></span>
+          </div>
+
+          <div class="project-media-frame">
+            <button class="media-nav media-nav--left" id="media-prev" aria-label="Previous media">‹</button>
+            <div class="project-media-main" id="media-main"></div>
+            <button class="media-nav media-nav--right" id="media-next" aria-label="Next media">›</button>
+          </div>
+
+          <div class="project-media-dots" id="media-dots"></div>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>© 2025 Esteban Caicedo · Built with vanilla HTML/CSS &amp; Three.js · Toronto</p>
-    </div>
+  <footer class="site-footer project-footer">
+    <p>© 2025 Esteban Caicedo · Built with TailwindCSS vibes &amp; Three.js style</p>
   </footer>
 
-  <!-- ===== Projects loader (minimal cards) ===== -->
   <script>
-    /* Render minimal cards from projects.json (image/video + Open button) */
-    (async () => {
-      const grid = document.getElementById('project-grid');
-      if (!grid) return;
+    async function loadProject() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("slug");
 
-      grid.innerHTML = '<div style="opacity:.7;padding:12px;">Loading projects…</div>';
+      const titleEl   = document.getElementById("project-title");
+      const shortEl   = document.getElementById("project-short");
+      const longEl    = document.getElementById("project-long");
+      const tagsEl    = document.getElementById("project-tags");
+      const viewer    = document.getElementById("project-viewer");
+      const viewerPh  = document.getElementById("viewer-placeholder");
+      const mediaMain = document.getElementById("media-main");
+      const mediaDots = document.getElementById("media-dots");
+      const mediaCount= document.getElementById("project-media-count");
+      const prevBtn   = document.getElementById("media-prev");
+      const nextBtn   = document.getElementById("media-next");
 
-      // Carga robusta (evita problemas de ruta/hosting)
-      async function loadProjects() {
-        const tries = ['projects.json', './projects.json', '/projects.json'];
-        for (const url of tries) {
-          try {
-            const res = await fetch(url, { cache: 'no-store' });
-            if (res.ok) return res.json();
-          } catch (_) {}
-        }
-        throw new Error('projects.json not found');
+      function isVideo(url) {
+        return /\.mp4($|\?)/i.test(url);
       }
 
-      const projects = await loadProjects();
+      let projects;
+      try {
+        const res = await fetch("projects.json");
+        projects = await res.json();
+      } catch (err) {
+        console.error("Error loading projects.json", err);
+        longEl.textContent = "Could not load project data.";
+        return;
+      }
 
-      const makeCard = (p) => {
-        // 1) Media de portada (prioriza imagen; si no, 1er video; si no, placeholder)
-        const firstImg = (p.images || []).find(src => /\.(png|jpe?g|gif|webp)$/i.test(src));
-        const firstVid = (p.videos || [])[0];
+      const project = projects.find(p => p.slug === slug) || projects[0];
+      if (!project) return;
 
-        let mediaHTML = '';
-        if (firstImg) {
-          mediaHTML = `<img src="${firstImg}" alt="${p.title}" class="card__media" loading="lazy">`;
-        } else if (firstVid) {
-          mediaHTML = `
-            <video class="card__media" muted playsinline loop preload="metadata">
-              <source src="${firstVid}" type="video/mp4">
-            </video>`;
+      // textos
+      titleEl.textContent = project.title;
+      shortEl.textContent = project.description || "";
+      longEl.textContent  = project.longDescription || project.description || "";
+
+      // tags
+      tagsEl.innerHTML = "";
+      (project.tags || []).forEach(tag => {
+        const span = document.createElement("span");
+        span.className = "pill pill--small";
+        span.textContent = tag;
+        tagsEl.appendChild(span);
+      });
+
+      // viewer 3D
+      if (project.model) {
+        viewer.src = project.model;
+        viewer.alt = project.title + " 3D model";
+        viewer.classList.remove("hidden");
+        viewerPh.classList.add("hidden");
+      } else {
+        viewer.src = "";
+        viewer.classList.add("hidden");
+        viewerPh.classList.remove("hidden");
+      }
+
+      // media (imagenes + videos)
+      const mediaItems = [];
+      if (Array.isArray(project.images)) {
+        project.images.forEach(url => {
+          mediaItems.push({
+            type: isVideo(url) ? "video" : "image",
+            url
+          });
+        });
+      }
+      if (Array.isArray(project.videos)) {
+        project.videos.forEach(url => {
+          mediaItems.push({ type: "video", url });
+        });
+      }
+
+      if (!mediaItems.length) {
+        mediaMain.innerHTML = "<div class='project-media-empty'>No images or videos yet for this project.</div>";
+        mediaDots.innerHTML = "";
+        mediaCount.textContent = "";
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        return;
+      }
+
+      let currentIndex = 0;
+      mediaCount.textContent = mediaItems.length + " items";
+
+      function renderMedia(index) {
+        const item = mediaItems[index];
+        mediaMain.innerHTML = "";
+
+        if (item.type === "video") {
+          const video = document.createElement("video");
+          video.src = item.url;
+          video.controls = true;
+          video.className = "project-media-video";
+          mediaMain.appendChild(video);
         } else {
-          mediaHTML = `<div class="card__media card__media--empty">No preview</div>`;
+          const img = document.createElement("img");
+          img.src = item.url;
+          img.alt = project.title + " media";
+          img.loading = "lazy";
+          img.className = "project-media-image";
+          mediaMain.appendChild(img);
         }
 
-        // 2) Tags
-        const tags = (p.tags || [])
-          .map(t => `<span class="tag">${t}</span>`)
-          .join('');
-
-        // 3) Card
-        return `
-          <article class="card">
-            <div class="card__thumb">${mediaHTML}</div>
-            <div class="card__body">
-              <h3 class="card__title">${p.title}</h3>
-              <p class="card__desc">${p.description ?? ''}</p>
-              <div class="card__tags">${tags}</div>
-              <div class="card__cta">
-                <a class="btn btn-primary" href="project.html?slug=${encodeURIComponent(p.slug)}">Open</a>
-              </div>
-            </div>
-          </article>
-        `;
-      };
-
-      grid.innerHTML = projects.map(makeCard).join('');
-
-      // Autoplay silencioso en hover para videos de portada (opcional)
-      grid.querySelectorAll('video.card__media').forEach(v => {
-        v.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
-        v.addEventListener('mouseleave', () => {
-          v.pause();
-          v.currentTime = 0;
+        Array.from(mediaDots.children).forEach((dot, i) => {
+          dot.classList.toggle("active", i === index);
         });
+      }
+
+      // dots
+      mediaDots.innerHTML = "";
+      mediaItems.forEach((_item, i) => {
+        const dot = document.createElement("button");
+        dot.className = "media-dot" + (i === 0 ? " active" : "");
+        dot.type = "button";
+        dot.addEventListener("click", () => {
+          currentIndex = i;
+          renderMedia(currentIndex);
+        });
+        mediaDots.appendChild(dot);
       });
-    })();
+
+      renderMedia(currentIndex);
+
+      prevBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
+        renderMedia(currentIndex);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % mediaItems.length;
+        renderMedia(currentIndex);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadProject);
   </script>
 </body>
 </html>
