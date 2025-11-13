@@ -393,95 +393,126 @@ a {
     margin-bottom: 20px;
   }
 }
+
 /* =========================================================
-   TEXTURAS Y MATERIALIDAD – v3 VINOTINTO SERIO
-   (Overrides finales: fondo, cards, botones, nav, dots)
+   GRAFFITI ELEGANTE – VINOTINTO + DORADO
+   (Overrides de fondo, nav, cards, botones, chips, dots)
    ========================================================= */
 
-/* Fondo con viñeta fuerte + textura visible */
+/* Fondo tipo mural oscuro con sprays suaves */
 body {
   background:
-    radial-gradient(circle at 0% -10%, rgba(130, 0, 40, 0.75), transparent 55%),
-    radial-gradient(circle at 100% 120%, rgba(192, 164, 90, 0.25), transparent 60%),
-    radial-gradient(circle at 50% 130%, rgba(0, 0, 0, 0.9), #050007 70%),
-    linear-gradient(180deg, #19000a 0%, #070005 45%, #020104 100%);
+    radial-gradient(circle at 5% 0%, rgba(180, 40, 90, 0.7), transparent 55%),
+    radial-gradient(circle at 95% 120%, rgba(192, 164, 90, 0.28), transparent 60%),
+    conic-gradient(from 220deg at 10% 80%, rgba(0, 255, 200, 0.06), transparent 45%, rgba(255, 120, 90, 0.08), transparent 70%),
+    linear-gradient(180deg, #15000a 0%, #050005 45%, #020104 100%);
   background-attachment: fixed;
   color: var(--ink);
   position: relative;
 }
 
-/* Capa de ruido más marcada */
+/* Capa de ruido + manchas leves encima (textura “pared”) */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.18; /* sube/baja esto si quieres más/menos textura */
   mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+  opacity: 0.18; /* baja a 0.10 si te parece demasiado */
+  background-image:
+    /* manchas diagonales tipo pintura */
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08) 0 8px,
+      transparent 8px 32px),
+    linear-gradient(215deg,
+      rgba(0, 0, 0, 0.4) 0 18px,
+      transparent 18px 40px),
+    /* ruido */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
   z-index: -1;
 }
 
-/* Nav: subrayado dorado en vez de azul */
-.nav > div a::after {
-  background: linear-gradient(90deg, #c9af66, #f4e6a5);
+/* Segunda capa: “sprays” de color muy suaves */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(255, 230, 160, 0.22), transparent 55%),
+    radial-gradient(circle at 78% 20%, rgba(90, 200, 255, 0.16), transparent 55%),
+    radial-gradient(circle at 40% 90%, rgba(255, 120, 150, 0.14), transparent 55%);
+  z-index: -1;
 }
 
-/* Cards = panel vinotinto serio */
+/* Nav: subrayado dorado + turquesa en vez de azul */
+.nav > div a::after {
+  background: linear-gradient(90deg, #c9af66, #4fd9d0);
+}
+
+/* ================== CARDS ================== */
+
+/* Panel oscuro con “spray” suave en la parte de arriba */
 .card {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.2) 12%),
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.07), transparent 60%),
-    linear-gradient(150deg, #1a000c, #0b0007 55%, #040003 100%);
+    linear-gradient(190deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.9) 30%),
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.10), transparent 55%),
+    linear-gradient(150deg, #1a000c, #090007 60%, #040003 100%);
   border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
-    0 20px 46px rgba(0, 0, 0, 0.9),
-    0 0 0 1px rgba(0, 0, 0, 0.55);
+    0 20px 46px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(0, 0, 0, 0.6);
   overflow: hidden;
 }
 
-/* Highlight superior tipo borde pulido */
+/* Borde superior como brillo de metal pintado */
 .card::before {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 60px;
-  border-radius: 22px 22px 0 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.16),
-    rgba(255, 255, 255, 0.04),
-    transparent
-  );
-  opacity: 0.22;
+  left: -10%;
+  right: -10%;
+  top: -2px;
+  height: 70px;
+  border-radius: 26px 26px 0 0;
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.22),
+      rgba(255, 255, 255, 0.0)),
+    linear-gradient(110deg,
+      rgba(201, 175, 102, 0.22),
+      rgba(79, 217, 208, 0.18),
+      transparent 70%);
+  opacity: 0.35;
   pointer-events: none;
 }
 
-/* Hover de cards – profundidad vinotinto, NADA azul */
+/* Hover: profundidad + borde dorado, NADA azul */
 .card:hover,
 .card:focus,
 .card:focus-within {
   transform: translateY(-4px);
   border-color: rgba(255, 215, 130, 0.55);
   box-shadow:
-    0 26px 64px rgba(0, 0, 0, 1),
+    0 26px 68px rgba(0, 0, 0, 1),
     0 0 26px rgba(255, 215, 130, 0.22);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(0, 0, 0, 0.22) 14%),
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 62%),
-    linear-gradient(145deg, #22000f, #0b0007 58%, #040003 100%);
+    linear-gradient(185deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 35%),
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.16), transparent 60%),
+    linear-gradient(150deg, #22000f, #090007 60%, #040003 100%);
 }
 
-/* Slider enmarcado dentro de la card */
+/* Slider ligeramente enmarcado dentro de la card */
 .slider {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-  background: radial-gradient(circle at center, #2a0012 0%, #050004 80%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  background: radial-gradient(circle at center, #310012 0%, #050004 80%);
 }
 
-/* Botón dorado con volumen (sin cambiar a azul en hover) */
+/* ================== BOTONES ================== */
+
+/* Botón dorado con volumen y halo suave */
 .btn {
   position: relative;
   background: linear-gradient(135deg, #c9af66, #b18b3b);
@@ -490,21 +521,20 @@ body::before {
   border: 0;
   padding: 9px 22px;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.16),
-    0 18px 42px rgba(0, 0, 0, 0.9);
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 18px 42px rgba(0, 0, 0, 0.95);
   transition:
     transform 0.14s ease-out,
     box-shadow 0.14s ease-out,
     filter 0.14s ease-out,
-    background 0.14s ease-out,
-    border-color 0.14s ease-out;
+    background 0.14s ease-out;
 }
 
 /* Highlight superior tipo metal satinado */
 .btn::after {
   content: "";
   position: absolute;
-  inset: 2px 3px 50%;
+  inset: 2px 3px 52%;
   border-radius: inherit;
   background: linear-gradient(
     180deg,
@@ -515,30 +545,47 @@ body::before {
   pointer-events: none;
 }
 
-/* Hover: mismo dorado, solo más contraste */
+/* Halo de spray alrededor del botón (muy suave) */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 230, 160, 0.35), transparent 70%);
+  opacity: 0.0;
+  pointer-events: none;
+  transition: opacity 0.16s ease-out, filter 0.16s ease-out;
+}
+
+/* Hover: más brillo, sin cambiar de color */
 .btn:hover {
   transform: translateY(-1px);
   filter: brightness(1.03);
-  background: linear-gradient(135deg, #d1b66f, #b7933f);
-  border-color: transparent;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.32),
     0 24px 56px rgba(0, 0, 0, 0.98);
 }
 
-/* Chips “fresados” con borde interior */
+.btn:hover::before {
+  opacity: 1;
+  filter: blur(2px);
+}
+
+/* ================== CHIPS / TAGS ================== */
+
 .chip {
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.65));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.7);
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.7));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.75);
 }
 
 .chip:hover {
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.19), rgba(0, 0, 0, 0.7));
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.19), rgba(0, 0, 0, 0.75));
   border-color: rgba(255, 215, 130, 0.7);
 }
 
-/* Dots en dorado suave (sin azul) */
+/* ================== DOTS DEL SLIDER ================== */
+
 .dot.active {
-  background: #d6b86a;
+  background: #d6b86a;  /* dorado suave, no azul */
 }
