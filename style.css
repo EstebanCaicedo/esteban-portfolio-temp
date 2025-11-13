@@ -100,7 +100,7 @@ a {
 
 .nav {
   display: flex;
-  align-items: flex-end;
+  align-items: center; /* antes: flex-end */
   justify-content: space-between;
   gap: 16px;
   padding: 8px 0 18px;
@@ -175,14 +175,13 @@ a {
   opacity: 1;
 }
 
-.nav-links a.active {
-  opacity: 1;
-}
-
-.nav-links a.active::after {
+.nav-links a:hover::after {
   transform: scaleX(1);
   opacity: 1;
 }
+
+/* aquí ya NO hay nada de .nav-links a.active */
+
 
 /* Back pill on project page */
 .back-link {
@@ -516,10 +515,11 @@ a {
 
 .detail-summary {
   margin: 0;
-  margin-top: 4px;
+  margin-top: 6px;
   color: var(--muted);
-  font-size: 13px;
-  max-width: 580px;
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 640px;
 }
 
 .detail {
@@ -646,7 +646,7 @@ a {
   }
 
   .site-title--small {
-    font-size: 20px;
+    font-size: 28px;
   }
 
   .nav-links {
