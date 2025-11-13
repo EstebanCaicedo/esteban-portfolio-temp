@@ -315,3 +315,10 @@ body {
   transform: scaleX(1);
   opacity: 1;
 }
+.card:hover {
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35),
+              0 0 22px rgba(255, 215, 130, 0.22); 
+  border-color: rgba(255, 215, 130, 0.45);
+  transform: translateY(-5px);
+  transition: all 0.2s ease;
+}
