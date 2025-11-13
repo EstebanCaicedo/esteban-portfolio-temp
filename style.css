@@ -59,14 +59,16 @@ a{color:inherit;text-decoration:none}
 
 /* === Personalidad extra v2.6.5 (fondo + header + cards + botones) === */
 
-/* Fondo con más profundidad */
+/* Fondo con más profundidad (suavizado, sin “corte”) */
 body {
   background:
-    radial-gradient(circle at 0% -10%, rgba(79, 106, 243, 0.35), transparent 55%),
-    radial-gradient(circle at 100% 110%, rgba(17, 232, 189, 0.18), transparent 60%),
-    #0b1220;
+    radial-gradient(circle at 0% -10%, rgba(79, 106, 243, 0.30), transparent 55%),
+    radial-gradient(circle at 100% 120%, rgba(17, 232, 189, 0.14), transparent 60%),
+    linear-gradient(180deg, #050816 0%, #050816 55%, #02040c 100%);
+  background-attachment: fixed;
   color: var(--ink);
 }
+
 
 /* Header un poquito más “product” */
 .nav {
