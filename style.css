@@ -393,3 +393,130 @@ a {
     margin-bottom: 20px;
   }
 }
+
+/* =========================================================
+   TEXTURAS Y MATERIALIDAD – CAPA FINAL DE ESTILO
+   (Pegar esto AL FINAL del style.css actual)
+   ========================================================= */
+
+/* Fondo con viñeta + ruido suave */
+body {
+  background:
+    radial-gradient(circle at 0% -20%, rgba(90, 0, 35, 0.65), transparent 55%),
+    radial-gradient(circle at 100% 120%, rgba(192, 164, 90, 0.20), transparent 60%),
+    linear-gradient(180deg, #14000a 0%, #070005 45%, #020104 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  position: relative;
+}
+
+/* Capa de ruido suave encima del fondo */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.10; /* sube/baja si quieres más/menos textura */
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  z-index: -1;
+}
+
+/* Cards con sensación de panel serio (oscuro + bordes suaves) */
+.card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.18) 12%),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 60%),
+    linear-gradient(150deg, #13000a, #080007 55%, #050004 100%);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+/* Sutil highlight superior en la tarjeta (como un borde pulido) */
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 60px;
+  border-radius: 22px 22px 0 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.02),
+    transparent
+  );
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* Hover sobrio (sin colores raros, solo más profundidad) */
+.card:hover,
+.card:focus,
+.card:focus-within {
+  transform: translateY(-4px);
+  border-color: rgba(255, 215, 130, 0.45);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.95),
+    0 0 24px rgba(255, 215, 130, 0.18);
+}
+
+/* Slider ligeramente enmarcado dentro de la card */
+.slider {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background: radial-gradient(circle at center, #2a0012 0%, #050004 80%);
+}
+
+/* Botón dorado con volumen (manteniendo seriedad) */
+.btn {
+  position: relative;
+  background: linear-gradient(135deg, #c9af66, #b18b3b);
+  color: #120b02;
+  border-radius: 999px;
+  border: 0;
+  padding: 9px 22px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 18px 42px rgba(0, 0, 0, 0.9);
+}
+
+/* Highlight superior del botón (como metal satinado) */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 2px 3px 50%;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.0)
+  );
+  opacity: 0.40;
+  pointer-events: none;
+}
+
+/* Hover del botón: un poco más de brillo, sin parecer juguete */
+.btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.32),
+    0 24px 56px rgba(0, 0, 0, 0.98);
+}
+
+/* Tags/chips un poco más “fresados” (borde interior sutil) */
+.chip {
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.55));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.55);
+}
+
+.chip:hover {
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.6));
+  border-color: rgba(255, 215, 130, 0.65);
+}
