@@ -3,87 +3,146 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Project</title>
+  <title>Project – Engineering Portfolio</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <div class="container">
-    <div class="nav">
-      <a href="index.html">← Back</a>
-      <div style="display:flex;gap:18px">
+    <header class="nav">
+      <div class="nav-left">
+        <a href="index.html" class="back-link">← Back to projects</a>
+        <h1 id="title" class="site-title site-title--small"></h1>
+      </div>
+
+      <nav class="nav-links">
         <a href="index.html">Projects</a>
         <a href="https://www.linkedin.com/in/esteban-caicedo/" target="_blank" rel="noreferrer">LinkedIn</a>
-      </div>
-    </div>
+      </nav>
+    </header>
 
-    <div id="title" style="font-size:28px;font-weight:700;margin:8px 0 18px"></div>
-
-    <div class="detail">
+    <main class="detail">
       <!-- 3D viewer -->
-      <div class="viewer" id="viewer">
-        <!-- Si no se puede cargar el model, se mostrará un mensaje -->
-      </div>
+      <section class="viewer" id="viewer" aria-label="3D model viewer">
+        <!-- Model or fallback text -->
+      </section>
 
       <!-- description + gallery -->
-      <div>
-        <p id="long" class="p-sm" style="margin:6px 0 18px"></p>
-        <div id="gallery" class="slider" style="aspect-ratio:16/9"></div>
-      </div>
-    </div>
+      <section class="detail-right">
+        <p id="long" class="p-sm detail-text"></p>
+        <div id="gallery" class="slider detail-gallery" aria-label="Project media gallery"></div>
+      </section>
+    </main>
   </div>
 
   <script>
   // ====== same helpers as index ======
   const isVideo=(src)=>/\.(mp4|webm|ogg)$/i.test(src);
+
   function makeMediaEl(src){
-    if(isVideo(src)){const v=document.createElement('video');v.src=src;v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='metadata';v.setAttribute('disablepictureinpicture','');return v;}
-    const img=new Image();img.src=src;img.alt='';img.loading='lazy';return img;
+    if(isVideo(src)){
+      const v=document.createElement('video');
+      v.src=src;
+      v.muted=true;
+      v.loop=true;
+      v.autoplay=true;
+      v.playsInline=true;
+      v.preload='metadata';
+      v.setAttribute('disablepictureinpicture','');
+      return v;
+    }
+    const img=new Image();
+    img.src=src;
+    img.alt='';
+    img.loading='lazy';
+    return img;
   }
+
   function mountMediaSlider(container, mediaPaths, heightPx, opts){
-    opts=opts||{}; const autoplay=opts.autoplay!==false; const interval=opts.interval||3000;
-    container.classList.add('slider'); if(heightPx) container.style.height=heightPx+'px';
+    opts=opts||{};
+    const autoplay=opts.autoplay!==false;
+    const interval=opts.interval||3000;
+    container.classList.add('slider');
+    if(heightPx) container.style.height=heightPx+'px';
+
+    if (!mediaPaths || !mediaPaths.length) {
+      container.classList.add('slider--empty');
+      container.innerHTML = '<div class="slider-empty-msg">No media for this project.</div>';
+      return;
+    }
+
     const a=document.createElement('div');a.className='slide-layer active';
     const b=document.createElement('div');b.className='slide-layer';
     let useA=true, idx=0, timer=null;
-    a.appendChild(makeMediaEl(mediaPaths[0]||'')); b.appendChild(makeMediaEl(mediaPaths[1]||mediaPaths[0]||'')); container.append(a,b);
+
+    a.appendChild(makeMediaEl(mediaPaths[0]||''));
+    b.appendChild(makeMediaEl(mediaPaths[1]||mediaPaths[0]||''));
+    container.append(a,b);
+
     const left=document.createElement('div'); left.className='ctrl left'; left.textContent='‹';
     const right=document.createElement('div'); right.className='ctrl right'; right.textContent='›';
     container.append(left,right);
+
     let dots=null;
     if(mediaPaths.length>1){
       dots=document.createElement('div');dots.className='dots';
-      mediaPaths.forEach((_,i)=>{const d=document.createElement('span');d.className='dot'+(i===0?' active':'');d.onclick=()=>show(i);dots.appendChild(d);});
+      mediaPaths.forEach((_,i)=>{
+        const d=document.createElement('span');
+        d.className='dot'+(i===0?' active':'');
+        d.onclick=()=>show(i);
+        dots.appendChild(d);
+      });
       container.appendChild(dots);
     }
+
     function show(nextIndex){
       idx=(nextIndex+mediaPaths.length)%mediaPaths.length;
-      const target=(useA?b:a); target.innerHTML=''; target.appendChild(makeMediaEl(mediaPaths[idx]||''));
-      (useA?a:b).classList.remove('active'); (useA?b:a).classList.add('active'); useA=!useA;
-      if(dots){dots.childNodes.forEach((d,i)=>d.className='dot'+(i===idx?' active':''));}
+      const target=(useA?b:a);
+      target.innerHTML='';
+      target.appendChild(makeMediaEl(mediaPaths[idx]||''));
+      (useA?a:b).classList.remove('active');
+      (useA?b:a).classList.add('active');
+      useA=!useA;
+      if(dots){
+        dots.childNodes.forEach((d,i)=>d.className='dot'+(i===idx?' active':''));
+      }
     }
-    left.onclick=()=>show(idx-1); right.onclick=()=>show(idx+1);
-    function start(){ if(autoplay && mediaPaths.length>1) timer=setInterval(()=>show(idx+1), interval); }
-    function stop(){ if(timer){clearInterval(timer); timer=null;} }
-    container.addEventListener('mouseenter',stop); container.addEventListener('mouseleave',start);
+
+    left.onclick=()=>show(idx-1);
+    right.onclick=()=>show(idx+1);
+
+    function start(){
+      if(autoplay && mediaPaths.length>1) timer=setInterval(()=>show(idx+1), interval);
+    }
+    function stop(){
+      if(timer){clearInterval(timer); timer=null;}
+    }
+    container.addEventListener('mouseenter',stop);
+    container.addEventListener('mouseleave',start);
     start();
   }
 
-  // ====== very light 3D viewer (model-viewer fallback-free) ======
-  // Usamos <model-viewer> si está disponible; si no, mostramos texto.
+  // ====== very light 3D viewer ======
   function mountModel(container, src) {
-    if (!src) { container.innerHTML='<div style="opacity:.7">No 3D model.</div>'; return; }
+    if (!src) {
+      container.innerHTML='<div class="viewer-empty">No 3D model for this project.</div>';
+      return;
+    }
 
-    // Intento con <model-viewer> (si el browser lo soporta o ya lo tenías)
     const tag = document.createElement('model-viewer');
     tag.setAttribute('src', src);
     tag.setAttribute('camera-controls','');
     tag.setAttribute('auto-rotate','');
     tag.setAttribute('exposure','1.0');
-    tag.style.width='100%'; tag.style.height='100%';
-    tag.addEventListener('error', ()=> { container.innerHTML='<div style="opacity:.7">Model preview not available.</div>'; });
-    container.innerHTML=''; container.appendChild(tag);
+    tag.setAttribute('ar','');
+    tag.setAttribute('shadow-intensity','0.7');
+    tag.style.width='100%';
+    tag.style.height='100%';
+    tag.addEventListener('error', ()=>{
+      container.innerHTML='<div class="viewer-empty">Model preview not available.</div>';
+    });
+    container.innerHTML='';
+    container.appendChild(tag);
 
-    // Carga del script solo si no existe
     if (!customElements.get('model-viewer')) {
       const s=document.createElement('script');
       s.type='module';
@@ -101,13 +160,14 @@
     const list=await res.json();
     const p=list.find(x=>x.slug===slug) || list[0];
 
+    document.title = (p.title ? p.title + ' – Engineering Portfolio' : 'Project – Engineering Portfolio');
     document.getElementById('title').textContent = p.title || 'Project';
     document.getElementById('long').textContent  = p.longDescription || '';
 
     // viewer
     mountModel(document.getElementById('viewer'), p.model || '');
 
-    // gallery (images + videos)
+    // gallery
     const media=[...(p.images||[]), ...(p.videos||[])];
     mountMediaSlider(document.getElementById('gallery'), media, 0, {autoplay:true});
   })();
