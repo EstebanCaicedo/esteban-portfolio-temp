@@ -2,229 +2,101 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Project – Esteban Caicedo</title>
+  <title>Esteban Caicedo – Engineering Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
-
-  <!-- model-viewer para los .glb -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 </head>
 <body>
-  <!-- NAV SIMPLE / CONSISTENTE CON EL INDEX -->
+  <!-- ================= NAVBAR ================= -->
   <header class="site-header">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">
         <span class="nav-dot"></span>
-        <span class="nav-name">Esteban <span class="nav-last">Caicedo</span></span>
+        <span>Esteban <span class="nav-last">Caicedo</span></span>
       </a>
+
       <nav class="nav-links">
-        <a href="index.html#projects" class="nav-link">Projects</a>
-        <a href="#" class="nav-link nav-link--muted">Experience</a>
-        <a href="https://www.linkedin.com/in/esteban-caicedo-ec" target="_blank" rel="noreferrer" class="nav-cta">LinkedIn</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <span class="nav-link nav-link--muted">Experience</span>
+        <a href="https://www.linkedin.com" target="_blank" class="nav-cta">
+          LinkedIn
+        </a>
       </nav>
     </div>
   </header>
 
-  <main class="project-page">
-    <!-- fila back / título -->
-    <div class="project-header-row">
-      <a href="index.html#projects" class="project-back-link">
-        <span>←</span>
-        <span>Back to projects</span>
-      </a>
-      <div class="project-header-text">
-        <h1 id="project-title" class="project-title">Project title</h1>
-        <p id="project-short" class="project-short">Short description.</p>
-        <div id="project-tags" class="project-tags"></div>
-      </div>
-    </div>
+  <main>
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <div class="hero-grid">
+        <!-- Panel izquierdo (slot para viewer futuro) -->
+        <div class="hero-preview">
+          <!-- Lo podemos usar luego para un teaser 3D o imagen -->
+        </div>
 
-    <!-- layout principal -->
-    <section class="project-main">
-      <!-- viewer 3D -->
-      <div class="project-viewer-card">
-        <model-viewer id="project-viewer"
-          src=""
-          alt="3D model"
-          camera-controls
-          auto-rotate
-          autoplay
-          exposure="0.9"
-          shadow-intensity="0.8"
-          style="width:100%;height:100%;">
-        </model-viewer>
-        <div id="viewer-placeholder" class="project-viewer-placeholder hidden">
-          <p>No 3D model for this project yet.</p>
+        <!-- Texto y CTA -->
+        <div>
+          <p class="hero-kicker">
+            CAD/CAE · Manufacturing · Composites · 3D Web
+          </p>
+          <h1 class="hero-title">
+            Engineering Projects,<br />
+            ready for real-time.
+          </h1>
+          <p class="hero-subtitle">
+            Clean models, CAM-ready parts, and interactive 3D viewers you can
+            drop straight into digital pipelines.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#projects" class="hero-btn primary">View Projects</a>
+            <a href="Esteban_Caicedo_Resume.pdf" class="hero-btn secondary">
+              Download Resume
+            </a>
+          </div>
+
+          <div class="hero-tags-row">
+            <span class="hero-tag">ARIES</span>
+            <span class="hero-tag">WIMTACH</span>
+            <span class="hero-tag">C-Bond</span>
+          </div>
         </div>
       </div>
 
-      <!-- info + galería -->
-      <div class="project-info-card">
-        <p id="project-long" class="project-long">
-          Long description placeholder.
+      <!-- Filtros visuales (All, CAD, Manufacturing, etc.) -->
+      <div class="filter-row">
+        <button class="filter-pill" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="CAD">CAD</button>
+        <button class="filter-pill" data-filter="Manufacturing">Manufacturing</button>
+        <button class="filter-pill" data-filter="Sheetmetal">Sheetmetal</button>
+        <button class="filter-pill" data-filter="Surfaces">Surfaces</button>
+        <button class="filter-pill" data-filter="Assembly">Assembly</button>
+      </div>
+    </section>
+
+    <!-- ================= PROJECTS GRID ================= -->
+    <section id="projects" class="section-projects">
+      <header class="section-header">
+        <p class="section-kicker">PROJECTS</p>
+        <h2 class="section-title">CAD, tooling, sheetmetal & mechanisms</h2>
+        <p class="section-subtitle">
+          Practice parts and fixtures with real machining workflows and
+          interactive 3D viewers.
         </p>
+      </header>
 
-        <div class="project-media">
-          <div class="project-media-header">
-            <span class="project-media-title">Gallery</span>
-            <span id="project-media-count" class="project-media-count"></span>
-          </div>
-
-          <div class="project-media-frame">
-            <button class="media-nav media-nav--left" id="media-prev" aria-label="Previous media">‹</button>
-            <div class="project-media-main" id="media-main"></div>
-            <button class="media-nav media-nav--right" id="media-next" aria-label="Next media">›</button>
-          </div>
-
-          <div class="project-media-dots" id="media-dots"></div>
-        </div>
-      </div>
+      <!-- Aquí el JS inserta todas las cards -->
+      <div id="projects-grid" class="project-grid"></div>
     </section>
   </main>
 
-  <footer class="site-footer project-footer">
-    <p>© 2025 Esteban Caicedo · Built with TailwindCSS vibes &amp; Three.js style</p>
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    © 2025 Esteban Caicedo · Built with TailwindCSS vibes &amp; Three.js style
   </footer>
 
-  <script>
-    async function loadProject() {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get("slug");
-
-      const titleEl   = document.getElementById("project-title");
-      const shortEl   = document.getElementById("project-short");
-      const longEl    = document.getElementById("project-long");
-      const tagsEl    = document.getElementById("project-tags");
-      const viewer    = document.getElementById("project-viewer");
-      const viewerPh  = document.getElementById("viewer-placeholder");
-      const mediaMain = document.getElementById("media-main");
-      const mediaDots = document.getElementById("media-dots");
-      const mediaCount= document.getElementById("project-media-count");
-      const prevBtn   = document.getElementById("media-prev");
-      const nextBtn   = document.getElementById("media-next");
-
-      function isVideo(url) {
-        return /\.mp4($|\?)/i.test(url);
-      }
-
-      let projects;
-      try {
-        const res = await fetch("projects.json");
-        projects = await res.json();
-      } catch (err) {
-        console.error("Error loading projects.json", err);
-        longEl.textContent = "Could not load project data.";
-        return;
-      }
-
-      const project = projects.find(p => p.slug === slug) || projects[0];
-      if (!project) return;
-
-      // textos
-      titleEl.textContent = project.title;
-      shortEl.textContent = project.description || "";
-      longEl.textContent  = project.longDescription || project.description || "";
-
-      // tags
-      tagsEl.innerHTML = "";
-      (project.tags || []).forEach(tag => {
-        const span = document.createElement("span");
-        span.className = "pill pill--small";
-        span.textContent = tag;
-        tagsEl.appendChild(span);
-      });
-
-      // viewer 3D
-      if (project.model) {
-        viewer.src = project.model;
-        viewer.alt = project.title + " 3D model";
-        viewer.classList.remove("hidden");
-        viewerPh.classList.add("hidden");
-      } else {
-        viewer.src = "";
-        viewer.classList.add("hidden");
-        viewerPh.classList.remove("hidden");
-      }
-
-      // media (imagenes + videos)
-      const mediaItems = [];
-      if (Array.isArray(project.images)) {
-        project.images.forEach(url => {
-          mediaItems.push({
-            type: isVideo(url) ? "video" : "image",
-            url
-          });
-        });
-      }
-      if (Array.isArray(project.videos)) {
-        project.videos.forEach(url => {
-          mediaItems.push({ type: "video", url });
-        });
-      }
-
-      if (!mediaItems.length) {
-        mediaMain.innerHTML = "<div class='project-media-empty'>No images or videos yet for this project.</div>";
-        mediaDots.innerHTML = "";
-        mediaCount.textContent = "";
-        prevBtn.disabled = true;
-        nextBtn.disabled = true;
-        return;
-      }
-
-      let currentIndex = 0;
-      mediaCount.textContent = mediaItems.length + " items";
-
-      function renderMedia(index) {
-        const item = mediaItems[index];
-        mediaMain.innerHTML = "";
-
-        if (item.type === "video") {
-          const video = document.createElement("video");
-          video.src = item.url;
-          video.controls = true;
-          video.className = "project-media-video";
-          mediaMain.appendChild(video);
-        } else {
-          const img = document.createElement("img");
-          img.src = item.url;
-          img.alt = project.title + " media";
-          img.loading = "lazy";
-          img.className = "project-media-image";
-          mediaMain.appendChild(img);
-        }
-
-        Array.from(mediaDots.children).forEach((dot, i) => {
-          dot.classList.toggle("active", i === index);
-        });
-      }
-
-      // dots
-      mediaDots.innerHTML = "";
-      mediaItems.forEach((_item, i) => {
-        const dot = document.createElement("button");
-        dot.className = "media-dot" + (i === 0 ? " active" : "");
-        dot.type = "button";
-        dot.addEventListener("click", () => {
-          currentIndex = i;
-          renderMedia(currentIndex);
-        });
-        mediaDots.appendChild(dot);
-      });
-
-      renderMedia(currentIndex);
-
-      prevBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
-        renderMedia(currentIndex);
-      });
-
-      nextBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex + 1) % mediaItems.length;
-        renderMedia(currentIndex);
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", loadProject);
-  </script>
+  <!-- Tu JS de siempre que carga projects.json y arma las cards -->
+  <script src="script.js"></script>
 </body>
 </html>
