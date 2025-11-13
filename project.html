@@ -12,30 +12,41 @@
       <div class="nav-left">
         <a href="index.html" class="back-link">← Back to projects</a>
         <h1 id="title" class="site-title site-title--small"></h1>
+        <p id="summary" class="detail-summary"></p>
       </div>
 
       <nav class="nav-links">
-        <a href="index.html">Projects</a>
+        <a href="index.html" class="active">Projects</a>
         <a href="https://www.linkedin.com/in/esteban-caicedo/" target="_blank" rel="noreferrer">LinkedIn</a>
       </nav>
     </header>
 
-    <main class="detail">
-      <!-- 3D viewer -->
-      <section class="viewer" id="viewer" aria-label="3D model viewer">
-        <!-- Model or fallback text -->
-      </section>
+    <main>
+      <section class="detail">
+        <!-- 3D viewer -->
+        <section class="viewer" id="viewer" aria-label="3D model viewer">
+          <!-- Model or fallback text -->
+        </section>
 
-      <!-- description + gallery -->
-      <section class="detail-right">
-        <p id="long" class="p-sm detail-text"></p>
-        <div id="gallery" class="slider detail-gallery" aria-label="Project media gallery"></div>
+        <!-- gallery -->
+        <section class="detail-media">
+          <div id="gallery" class="slider detail-gallery" aria-label="Project media gallery"></div>
+        </section>
       </section>
     </main>
   </div>
 
+  <!-- LIGHTBOX para ver imágenes/videos en grande -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-backdrop"></div>
+    <div class="lightbox-inner">
+      <button class="lightbox-close" aria-label="Close">×</button>
+      <div class="lightbox-content"></div>
+    </div>
+  </div>
+
   <script>
-  // ====== same helpers as index ======
+  // ====== utils ======
   const isVideo=(src)=>/\.(mp4|webm|ogg)$/i.test(src);
 
   function makeMediaEl(src){
@@ -48,6 +59,17 @@
       v.playsInline=true;
       v.preload='metadata';
       v.setAttribute('disablepictureinpicture','');
+
+      // Controles al pasar el mouse
+      v.addEventListener('mouseenter', ()=>{
+        v.controls = true;
+        v.muted = false;
+      });
+      v.addEventListener('mouseleave', ()=>{
+        v.controls = false;
+        v.muted = true;
+      });
+
       return v;
     }
     const img=new Image();
@@ -57,6 +79,57 @@
     return img;
   }
 
+  // ====== Lightbox ======
+  function openLightbox(src) {
+    const lb = document.getElementById('lightbox');
+    const content = lb.querySelector('.lightbox-content');
+    content.innerHTML = '';
+
+    if (isVideo(src)) {
+      const v = document.createElement('video');
+      v.src = src;
+      v.controls = true;
+      v.autoplay = true;
+      v.style.width = '100%';
+      v.style.maxHeight = '80vh';
+      v.style.objectFit = 'contain';
+      content.appendChild(v);
+    } else {
+      const img = new Image();
+      img.src = src;
+      img.alt = '';
+      img.style.width = '100%';
+      img.style.maxHeight = '80vh';
+      img.style.objectFit = 'contain';
+      content.appendChild(img);
+    }
+
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden','false');
+  }
+
+  function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden','true');
+    const content = lb.querySelector('.lightbox-content');
+    content.innerHTML = '';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const lb = document.getElementById('lightbox');
+    const closeBtn = lb.querySelector('.lightbox-close');
+    const backdrop = lb.querySelector('.lightbox-backdrop');
+
+    closeBtn.addEventListener('click', closeLightbox);
+    backdrop.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === 'Escape') closeLightbox();
+    });
+  });
+
+  // ====== Slider con soporte para lightbox ======
   function mountMediaSlider(container, mediaPaths, heightPx, opts){
     opts=opts||{};
     const autoplay=opts.autoplay!==false;
@@ -119,9 +192,18 @@
     container.addEventListener('mouseenter',stop);
     container.addEventListener('mouseleave',start);
     start();
+
+    // click en la imagen/video → lightbox
+    container.addEventListener('click', (e)=>{
+      // ignorar clicks en flechas y dots
+      if (e.target.classList.contains('ctrl') || e.target.classList.contains('dot')) return;
+      const currentSrc = mediaPaths[idx];
+      if (!currentSrc) return;
+      openLightbox(currentSrc);
+    });
   }
 
-  // ====== very light 3D viewer ======
+  // ====== 3D viewer ======
   function mountModel(container, src) {
     if (!src) {
       container.innerHTML='<div class="viewer-empty">No 3D model for this project.</div>';
@@ -133,7 +215,6 @@
     tag.setAttribute('camera-controls','');
     tag.setAttribute('auto-rotate','');
     tag.setAttribute('exposure','1.0');
-    tag.setAttribute('ar','');
     tag.setAttribute('shadow-intensity','0.7');
     tag.style.width='100%';
     tag.style.height='100%';
@@ -162,7 +243,10 @@
 
     document.title = (p.title ? p.title + ' – Engineering Portfolio' : 'Project – Engineering Portfolio');
     document.getElementById('title').textContent = p.title || 'Project';
-    document.getElementById('long').textContent  = p.longDescription || '';
+
+    // Descripción corta debajo del título (por ahora puedes usar p.description)
+    const summaryText = p.description || p.longDescription || '';
+    document.getElementById('summary').textContent = summaryText;
 
     // viewer
     mountModel(document.getElementById('viewer'), p.model || '');
