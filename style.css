@@ -100,18 +100,23 @@ a {
 
 .nav {
   display: flex;
-  align-items: center; /* antes: flex-end */
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 8px 0 18px;
-  margin-bottom: 8px;
+
+  /* SUBIMOS TODO: mucho menos padding */
+  padding: 4px 0 6px;
+
+  margin-bottom: 6px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .nav-left {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+
+  /* MENOS separacion entre título, back-link y resumen */
+  gap: 2px;
 }
 
 .site-title {
@@ -123,7 +128,8 @@ a {
 }
 
 .site-title--small {
-  font-size: 24px;
+  font-size: 28px;
+  margin-top: -4px; /* sube título sin afectar layout */
 }
 
 .tagline {
