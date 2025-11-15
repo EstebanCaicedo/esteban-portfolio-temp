@@ -689,12 +689,23 @@ a {
   width: 100%;
   height: 100vh;
 
-  /* Layout asimétrico 2 columnas x 3 filas */
-  grid-template-columns: 2fr 1.1fr;
-  grid-template-rows: 1.4fr 0.9fr 1.3fr;
-  gap: 2px; /* líneas finas entre bloques */
+  /* Layout base controlado por variables (para animarlo) */
+  --col1: 2.4fr;
+  --col2: 1.1fr;
+  --row1: 1.5fr;
+  --row2: 0.8fr;
+  --row3: 1.5fr;
+
+  grid-template-columns: var(--col1) var(--col2);
+  grid-template-rows: var(--row1) var(--row2) var(--row3);
+  gap: 2px;
 
   background: #000;
+
+  /* transición suave cuando cambian las fracciones */
+  transition:
+    grid-template-columns 0.35s ease,
+    grid-template-rows 0.35s ease;
 }
 
 /* Bloques base */
@@ -725,11 +736,22 @@ a {
   pointer-events: none;
 }
 
-/* Hover genérico */
-.landing-tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.9);
+/* Estados de hover globales: los demás se apagan un poco */
+.landing-grid:hover .landing-tile {
+  opacity: 0.82;
 }
+
+.landing-grid .landing-tile:hover {
+  opacity: 1;
+}
+
+/* Hover genérico (tile seleccionado) */
+.landing-tile:hover {
+  transform: scale(1.03);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.9);
+  z-index: 2; /* para que se “asome” por encima del borde de los demás */
+}
+
 
 /* ---------- Posiciones de los bloques ---------- */
 
@@ -766,6 +788,44 @@ a {
   border-color: #f9f9f9;
   font-family: "Press Start 2P", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+/* Cuando el mouse está sobre WORK (Experience) → fila de arriba crece */
+.landing-grid:has(.landing-tile--experience:hover) {
+  --row1: 2.1fr;
+  --row2: 0.6fr;
+  --row3: 1.3fr;
+}
+
+/* Cuando está sobre SKILLS → fila de abajo crece */
+.landing-grid:has(.landing-tile--skills:hover) {
+  --row1: 1.1fr;
+  --row2: 0.6fr;
+  --row3: 2.1fr;
+}
+
+/* Cuando está sobre ABOUT → la columna derecha se hace más grande */
+.landing-grid:has(.landing-tile--about:hover) {
+  --col1: 1.6fr;
+  --col2: 1.9fr;
+}
+
+/* Cuando está sobre CONTACT → refuerzo aún más columna derecha + fila baja */
+.landing-grid:has(.landing-tile--contact:hover) {
+  --col1: 1.5fr;
+  --col2: 2.0fr;
+  --row1: 1.2fr;
+  --row2: 0.7fr;
+  --row3: 2.0fr;
+}
+
+/* Cuando está sobre el centro <EC> → todo se reparte casi uniforme */
+.landing-grid:has(.landing-tile--center:hover) {
+  --row1: 1.2fr;
+  --row2: 1.2fr;
+  --row3: 1.2fr;
+  --col1: 1.7fr;
+  --col2: 1.7fr;
 }
 
 /* Si no tienes la fuente pixel, igual se ve bien; pero puedes incluirla con @font-face más adelante */
