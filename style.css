@@ -776,7 +776,7 @@ a {
 /* Abajo izquierda – Skills (una sola fila para que no sea tan alargado) */
 .landing-tile--skills {
   grid-column: 1 / 2;
-  grid-row: 2 / 3;
+  grid-row: 1 / 2;
 }
 
 /* Abajo derecha – Contact */
