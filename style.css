@@ -921,3 +921,29 @@ a {
     font-size: clamp(1.6rem, 6vw, 2.6rem);
   }
 }
+
+.back-home {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.14);
+  background: radial-gradient(circle at 0 0, rgba(255,255,255,0.12), transparent 70%);
+  margin-bottom: 6px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.back-home:hover {
+  border-color: rgba(212, 214, 225, 0.7);
+  color: #fff;
+}
+
+.nav-back-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+}
