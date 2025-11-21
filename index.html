@@ -3,161 +3,177 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Esteban Caicedo – Engineering Portfolio</title>
+  <title>Engineering Projects – Esteban Caicedo</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="home-root">
-    <!-- NAV SUPERIOR -->
-    <header class="home-nav">
-      <div class="home-logo">
-        <span>EC</span>
-      </div>
+ <header class="nav">
+  <div class="nav-left">
 
-      <nav class="home-nav-links">
-        <a href="index.html">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="index.html#about">About me</a>
-        <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/"
-           target="_blank"
-           rel="noreferrer">
-          LinkedIn
-        </a>
-      </nav>
-    </header>
+    <a href="index.html" class="back-home">← Back to Home</a>
 
-    <!-- HERO PRINCIPAL -->
-    <main class="home-hero" aria-label="Intro">
-      <div class="home-hero-inner">
-        <p class="home-kicker">Engineering portfolio</p>
+    <h1 class="site-title">
+      Engineering Projects
+    </h1>
 
-        <h1 class="home-title">
-          Esteban Caicedo
-        </h1>
+    <p class="tagline">
+      Portfolio of CAD/CAE work, interactive 3D models, and mixed-media engineering galleries.
+    </p>
 
-        <p class="home-subtitle">
-          Aerospace Manufacturing Engineering student focused on CAD, CNC machining,
-          and 3D simulation for aviation and advanced manufacturing.
-        </p>
+  </div>
 
-        <div class="home-tags">
-          <span class="chip">CAD</span>
-          <span class="chip">CNC machining</span>
-          <span class="chip">3D models</span>
-          <span class="chip">FEA / Simulation</span>
-        </div>
+  <nav class="nav-links">
+    <a href="projects.html" class="active">Projects</a>
+    <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/" target="_blank" rel="noreferrer">
+      LinkedIn
+    </a>
+  </nav>
+</header>
+  
 
-        <div class="home-cta-row">
-          <a class="btn home-cta-primary" href="projects.html">
-            View projects
-          </a>
-          <a class="home-cta-secondary"
-             href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/"
-             target="_blank"
-             rel="noreferrer">
-            Open LinkedIn ↗
-          </a>
-        </div>
-      </div>
+    <main>
+      <section aria-label="Projects grid">
+        <div id="grid" class="grid"></div>
+      </section>
     </main>
-
-    <!-- PROYECTOS DESTACADOS EN GRID -->
-    <section class="home-featured" aria-label="Featured projects">
-      <div class="home-featured-header">
-        <h2 class="home-section-title">Selected projects</h2>
-        <a class="home-section-link" href="projects.html">View all projects →</a>
-      </div>
-
-      <div id="home-featured-grid" class="home-featured-grid">
-        <!-- Aquí van las cards generadas por JS -->
-      </div>
-    </section>
-
-    <!-- Placeholder de ABOUT para el link (lo llenamos bien después) -->
-    <section id="about" class="home-about-placeholder" aria-label="About Esteban (coming soon)">
-      <h2 class="home-section-title">About me</h2>
-      <p class="home-about-text">
-        Short bio coming soon. This section will summarize who I am as a person and as an engineering professional.
-      </p>
-    </section>
   </div>
 
   <script>
-    // ===== utils mínimos para la mini-galería en home =====
-    const isVideo = (src) => /\.(mp4|webm|ogg)$/i.test(src);
+  // ---------- utils ----------
+  const isVideo = (src)=>/\.(mp4|webm|ogg)$/i.test(src);
 
-    function makeMediaThumb(src) {
-      if (!src) {
-        const ph = document.createElement('div');
-        ph.className = 'home-thumb-fallback';
-        ph.textContent = '3D model';
-        return ph;
-      }
+  function makeMediaEl(src) {
+    if (isVideo(src)) {
+      const v=document.createElement('video');
+      v.src=src;
+      v.muted=true;
+      v.loop=true;
+      v.autoplay=true;
+      v.playsInline=true;
+      v.preload='metadata';
+      v.setAttribute('disablepictureinpicture','');
 
-      if (isVideo(src)) {
-        const v = document.createElement('video');
-        v.src = src;
+      // Controles al pasar el mouse
+      v.addEventListener('mouseenter', ()=>{
+        v.controls = true;
+        v.muted = false;
+      });
+      v.addEventListener('mouseleave', ()=>{
+        v.controls = false;
         v.muted = true;
-        v.loop = true;
-        v.autoplay = true;
-        v.playsInline = true;
-        v.preload = 'metadata';
-        v.setAttribute('disablepictureinpicture','');
-        return v;
-      } else {
-        const img = new Image();
-        img.src = src;
-        img.alt = '';
-        img.loading = 'lazy';
-        return img;
-      }
+      });
+
+      return v;
+    } else {
+      const img=new Image();
+      img.src=src;
+      img.loading='lazy';
+      img.alt='';
+      return img;
+    }
+  }
+
+  function mountMediaSlider(container, mediaPaths, heightPx, opts) {
+    opts=opts||{};
+    const autoplay = opts.autoplay!==false;
+    const interval = opts.interval||3000;
+
+    container.classList.add('slider');
+    container.style.aspectRatio = '16 / 9';
+    container.style.height = heightPx ? (heightPx+'px') : '';
+
+    if (!mediaPaths || !mediaPaths.length) {
+      container.classList.add('slider--empty');
+      container.innerHTML = '<div class="slider-empty-msg">No media available</div>';
+      return;
     }
 
-    async function renderHomeFeatured() {
-      try {
-        const res = await fetch('projects.json', { cache: 'no-store' });
-        const projects = await res.json();
+    const a=document.createElement('div'); a.className='slide-layer active';
+    const b=document.createElement('div'); b.className='slide-layer';
+    let useA=true, idx=0, timer=null;
 
-        // Tomamos los primeros 4 como destacados (luego podemos elegir otros)
-        const featured = projects.slice(0, 4);
-        const grid = document.getElementById('home-featured-grid');
-        grid.innerHTML = '';
+    a.appendChild(makeMediaEl(mediaPaths[0]||'')); 
+    b.appendChild(makeMediaEl(mediaPaths[1]||mediaPaths[0]||''));
+    container.append(a,b);
 
-        featured.forEach((p, i) => {
-          const card = document.createElement('article');
-          card.className = 'card card--fade-in';
-          card.style.animationDelay = `${i * 80}ms`;
+    const left=document.createElement('div'); left.className='ctrl left'; left.textContent='‹';
+    const right=document.createElement('div'); right.className='ctrl right'; right.textContent='›';
+    container.append(left,right);
 
-          // header con thumb simple (no slider)
-          const head = document.createElement('div');
-          head.className = 'home-card-media';
-
-          const mediaList = [...(p.images || []), ...(p.videos || [])];
-          const firstMedia = mediaList[0];
-          head.appendChild(makeMediaThumb(firstMedia || ''));
-
-          // cuerpo
-          const body = document.createElement('div');
-          body.className = 'card-body';
-          body.innerHTML = `
-            <h3 class="h3">${p.title}</h3>
-            <p class="p-sm card-desc">${p.description || ''}</p>
-            <div class="tags">
-              ${(p.tags || []).slice(0,3).map(t => `<span class="chip">${t}</span>`).join('')}
-            </div>
-            <a class="btn" href="project.html?slug=${encodeURIComponent(p.slug)}">Open</a>
-          `;
-
-          card.appendChild(head);
-          card.appendChild(body);
-          grid.appendChild(card);
-        });
-      } catch (err) {
-        console.error('Error loading featured projects', err);
-      }
+    let dots=null;
+    if (mediaPaths.length>1) {
+      dots=document.createElement('div'); dots.className='dots';
+      mediaPaths.forEach((_,i)=>{
+        const d=document.createElement('span');
+        d.className='dot'+(i===0?' active':'');
+        d.onclick=()=>show(i);
+        dots.appendChild(d);
+      });
+      container.appendChild(dots);
     }
 
-    document.addEventListener('DOMContentLoaded', renderHomeFeatured);
+    function show(nextIndex){
+      idx=(nextIndex+mediaPaths.length)%mediaPaths.length;
+      const target=(useA?b:a);
+      target.innerHTML='';
+      target.appendChild(makeMediaEl(mediaPaths[idx]||''));
+      (useA?a:b).classList.remove('active');
+      (useA?b:a).classList.add('active');
+      useA=!useA;
+      if(dots){
+        dots.childNodes.forEach((d,i)=>d.className='dot'+(i===idx?' active':''));
+      }
+    }
+    left.onclick=()=>show(idx-1);
+    right.onclick=()=>show(idx+1);
+
+    function start(){
+      if(autoplay && mediaPaths.length>1) timer=setInterval(()=>show(idx+1), interval);
+    }
+    function stop(){
+      if(timer){clearInterval(timer); timer=null;}
+    }
+    container.addEventListener('mouseenter',stop);
+    container.addEventListener('mouseleave',start);
+    start();
+  }
+
+  // ---------- render ----------
+  async function renderCards() {
+    const res = await fetch('projects.json', {cache:'no-store'});
+    const projects = await res.json();
+    const grid = document.getElementById('grid');
+    grid.innerHTML='';
+
+    projects.forEach((p, i)=>{
+      const card=document.createElement('article');
+      card.className='card card--fade-in';
+      card.style.animationDelay = `${i * 60}ms`;
+
+      // header
+      const head=document.createElement('div');
+      card.appendChild(head);
+      const media=[...(p.images||[]), ...(p.videos||[])];
+      mountMediaSlider(head, media, null, {autoplay:true});
+
+      // body
+      const body=document.createElement('div');
+      body.className='card-body';
+      body.innerHTML = `
+        <h3 class="h3">${p.title}</h3>
+        <p class="p-sm card-desc">${p.description || ''}</p>
+        <div class="tags">
+          ${(p.tags||[]).map(t=>`<span class="chip">${t}</span>`).join('')}
+        </div>
+        <a class="btn" href="project.html?slug=${encodeURIComponent(p.slug)}">Open</a>
+      `;
+      card.appendChild(body);
+
+      grid.appendChild(card);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderCards);
   </script>
 </body>
 </html>
