@@ -122,8 +122,8 @@
         const res = await fetch('projects.json', { cache: 'no-store' });
         const projects = await res.json();
 
-        // Tomamos los primeros 4 como destacados (luego podemos elegir otros)
-        const featured = projects.slice(0, 4);
+       // Tomamos los primeros 6 como destacados
+        const featured = projects.slice(0, 6);
         const grid = document.getElementById('home-featured-grid');
         grid.innerHTML = '';
 
@@ -165,6 +165,7 @@
   </script>
 </body>
 </html>
+
 
 
 
