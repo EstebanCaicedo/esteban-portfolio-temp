@@ -72,7 +72,7 @@ html {
 /* Scrollbar para navegadores WebKit (Chrome, Edge, Safari) */
 /* Scrollbar refinado y más sobrio */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 16px;
 }
 
 ::-webkit-scrollbar-track {
