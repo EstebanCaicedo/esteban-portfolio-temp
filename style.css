@@ -65,32 +65,31 @@ body {
 
 
 /* ===== Scrollbar WebKit (Chrome / Edge / Safari) ===== */
-::-webkit-scrollbar {
-  width: 10px;
+body::-webkit-scrollbar {
+  width: 20px;          /* prueba luego con 18px para ver si reacciona */
 }
 
-::-webkit-scrollbar-track {
-  background:
-    linear-gradient(180deg, #0b0b12 0%, #090a10 100%);
+body::-webkit-scrollbar-track {
+  background: #050509;  /* súper oscuro para notar el cambio */
   border-radius: 999px;
 }
 
-::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   border-radius: 999px;
   background:
     linear-gradient(180deg,
-      rgba(55, 55, 65, 0.85),
-      rgba(25, 25, 32, 0.95)
+      rgba(70, 70, 82, 0.9),
+      rgba(32, 32, 40, 1)
     );
-  border: 2px solid #090a0f; /* borde más oscuro, mate */
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.45);
+  border: 2px solid #020206;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
 }
 
-::-webkit-scrollbar-thumb:hover {
+body::-webkit-scrollbar-thumb:hover {
   background:
     linear-gradient(180deg,
-      rgba(80, 80, 95, 0.9),
-      rgba(40, 40, 52, 1)
+      rgba(110, 110, 125, 0.95),
+      rgba(55, 55, 70, 1)
     );
 }
 
