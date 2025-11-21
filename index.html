@@ -3,40 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Esteban Caicedo – Portfolio</title>
+  <title>Esteban Caicedo – Engineering Portfolio</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="landing-body">
-  <main class="landing-root">
-    <div class="landing-grid">
-      <!-- EXPERIENCE -->
-      <a href="projects.html" class="landing-tile landing-tile--experience">
-        <span>Experience</span>
-      </a>
+<body>
+  <div class="home-root">
+    <!-- NAV SUPERIOR -->
+    <header class="home-nav">
+      <div class="home-logo">
+        <span>EC</span>
+      </div>
 
-      <!-- PROFILE -->
-      <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/" 
-         target="_blank" 
-         rel="noreferrer"
-         class="landing-tile landing-tile--about">
-        <span>Profile</span>
-      </a>
+      <nav class="home-nav-links">
+        <a href="projects.html">Projects</a>
+        <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/"
+           target="_blank"
+           rel="noreferrer">
+          LinkedIn
+        </a>
+      </nav>
+    </header>
 
-      <!-- SKILLS -->
-      <a href="#skills-soon" class="landing-tile landing-tile--skills">
-        <span>Skills</span>
-      </a>
+    <!-- HERO PRINCIPAL -->
+    <main class="home-hero" aria-label="Intro">
+      <div class="home-hero-inner">
+        <p class="home-kicker">Engineering portfolio</p>
 
-      <!-- CONTACT -->
-      <a href="#contact-soon" class="landing-tile landing-tile--contact">
-        <span>Contact</span>
-      </a>
+        <h1 class="home-title">
+          Esteban Caicedo
+        </h1>
 
-      <!-- CENTER TILE (marca personal) -->
-      <a href="projects.html" class="landing-tile landing-tile--center">
-        <span class="landing-tag">&lt;EC&gt;</span>
-      </a>
-    </div>
-  </main>
+        <p class="home-subtitle">
+          Aerospace Manufacturing Engineering student focused on CAD, CNC machining,
+          and 3D simulation for aviation and advanced manufacturing.
+        </p>
+
+        <div class="home-tags">
+          <span class="chip">CAD</span>
+          <span class="chip">CNC machining</span>
+          <span class="chip">3D models</span>
+          <span class="chip">FEA / Simulation</span>
+        </div>
+
+        <div class="home-cta-row">
+          <a class="btn home-cta-primary" href="projects.html">
+            View projects
+          </a>
+          <a class="home-cta-secondary"
+             href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/"
+             target="_blank"
+             rel="noreferrer">
+            Open LinkedIn ↗
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
