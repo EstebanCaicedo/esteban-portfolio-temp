@@ -63,41 +63,43 @@ body {
   overflow-x: hidden;
 }
 
-/* Scrollbar global integrado con la paleta (Firefox) */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(140, 34, 42, 0.9) rgba(7, 5, 12, 0.98);
-}
 
-/* Scrollbar para navegadores WebKit (Chrome, Edge, Safari) */
-/* Scrollbar refinado y más sobrio */
+/* ===== Scrollbar WebKit (Chrome / Edge / Safari) ===== */
 ::-webkit-scrollbar {
-  width: 16px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(10, 10, 16, 0.6);
+  background:
+    linear-gradient(180deg, #0b0b12 0%, #090a10 100%);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    rgba(80, 20, 28, 0.8),
-    rgba(40, 10, 18, 0.9)
-  );
   border-radius: 999px;
-  border: 1px solid rgba(20, 10, 14, 0.6);
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+  background:
+    linear-gradient(180deg,
+      rgba(55, 55, 65, 0.85),
+      rgba(25, 25, 32, 0.95)
+    );
+  border: 2px solid #090a0f; /* borde más oscuro, mate */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.45);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(120, 40, 50, 0.9),
-    rgba(60, 15, 25, 1)
-  );
+  background:
+    linear-gradient(180deg,
+      rgba(80, 80, 95, 0.9),
+      rgba(40, 40, 52, 1)
+    );
 }
+
+/* ===== Scrollbar Firefox ===== */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(50, 50, 60, 0.85) rgba(10, 10, 16, 1);
+}
+
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
