@@ -65,38 +65,34 @@ body {
 
 
 /* ===== Scrollbar WebKit (Chrome / Edge / Safari) ===== */
+html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-  width: 20px;          /* prueba luego con 18px para ver si reacciona */
+  width: 14px; /* más ancho para notar el cambio */
 }
 
+html::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track {
-  background: #050509;  /* súper oscuro para notar el cambio */
+  background: linear-gradient(180deg, #050509 0%, #090a0f 100%);
   border-radius: 999px;
 }
 
+html::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background:
-    linear-gradient(180deg,
-      rgba(70, 70, 82, 0.9),
-      rgba(32, 32, 40, 1)
-    );
-  border: 2px solid #020206;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+  background: #181822;              /* gris muy oscuro, mate */
+  border: 2px solid #050509;        /* borde negro para integrarlo al fondo */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
 }
 
+html::-webkit-scrollbar-thumb:hover,
 body::-webkit-scrollbar-thumb:hover {
-  background:
-    linear-gradient(180deg,
-      rgba(110, 110, 125, 0.95),
-      rgba(55, 55, 70, 1)
-    );
+  background: #252535;              /* un pelín más claro al hover */
 }
 
 /* ===== Scrollbar Firefox ===== */
 html {
   scrollbar-width: thin;
-  scrollbar-color: rgba(50, 50, 60, 0.85) rgba(10, 10, 16, 1);
+  scrollbar-color: #181822 #050509; /* mismo concepto: thumb oscuro, track casi negro */
 }
 
 
