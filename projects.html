@@ -7,30 +7,32 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
- <header class="nav">
-  <div class="nav-left">
+  <div class="container">
+    <!-- HEADER / NAV -->
+    <header class="nav">
+      <div class="nav-left">
+        <h1 class="site-title">
+          Engineering Projects
+        </h1>
 
-    <a href="index.html" class="back-home">← Back to Home</a>
+        <p class="tagline">
+          Portfolio of CAD/CAE work, interactive 3D models, and mixed-media engineering galleries.
+        </p>
+      </div>
 
-    <h1 class="site-title">
-      Engineering Projects
-    </h1>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="index.html#about">About me</a>
+        <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/"
+           target="_blank"
+           rel="noreferrer">
+          LinkedIn
+        </a>
+      </nav>
+    </header>
 
-    <p class="tagline">
-      Portfolio of CAD/CAE work, interactive 3D models, and mixed-media engineering galleries.
-    </p>
-
-  </div>
-
-  <nav class="nav-links">
-    <a href="projects.html" class="active">Projects</a>
-    <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/" target="_blank" rel="noreferrer">
-      LinkedIn
-    </a>
-  </nav>
-</header>
-  
-
+    <!-- GRID DE PROYECTOS -->
     <main>
       <section aria-label="Projects grid">
         <div id="grid" class="grid"></div>
@@ -80,7 +82,9 @@
 
     container.classList.add('slider');
     container.style.aspectRatio = '16 / 9';
-    container.style.height = heightPx ? (heightPx+'px') : '';
+
+    // 👇 Altura más pequeña para que las cards no ocupen toda la pantalla
+    container.style.height = heightPx ? (heightPx+'px') : '220px';
 
     if (!mediaPaths || !mediaPaths.length) {
       container.classList.add('slider--empty');
@@ -150,11 +154,12 @@
       card.className='card card--fade-in';
       card.style.animationDelay = `${i * 60}ms`;
 
-      // header
+      // header (slider más compacto)
       const head=document.createElement('div');
       card.appendChild(head);
       const media=[...(p.images||[]), ...(p.videos||[])];
-      mountMediaSlider(head, media, null, {autoplay:true});
+      // 👇 pasamos una altura pequeña (220px) para que se vea tipo BePortfolio
+      mountMediaSlider(head, media, 220, {autoplay:true});
 
       // body
       const body=document.createElement('div');
