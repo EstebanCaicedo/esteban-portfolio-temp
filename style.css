@@ -591,10 +591,17 @@ a {
 }
 
 .detail-gallery {
-  border-radius: 20px;
+  position: relative;
+  border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  min-height: 520px; /* mismo alto que viewer */
+  height: 520px;
+  min-height: 520px;
+  background:
+    linear-gradient(190deg, rgba(25, 19, 30, 0.96) 0%, rgba(10, 9, 16, 1) 35%, #050509 100%),
+    radial-gradient(circle at 0% 0%, rgba(107, 20, 27, 0.35), transparent 60%);
+  overflow: hidden;
 }
+
 
 /* 3D viewer */
 .viewer {
