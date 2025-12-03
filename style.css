@@ -567,6 +567,38 @@ a {
   background: var(--accent-red-soft);
 }
 
+/* ---------- Ajuste SOLO para la galería de detalle ---------- */
+
+/* Recuadro derecho en project.html */
+.detail-gallery {
+  position: relative;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  height: 520px;
+  min-height: 520px;
+  background:
+    linear-gradient(190deg, rgba(25, 19, 30, 0.96) 0%, rgba(10, 9, 16, 1) 35%, #050509 100%),
+    radial-gradient(circle at 0% 0%, rgba(107, 20, 27, 0.35), transparent 60%);
+  overflow: hidden;
+}
+
+/* Dentro del detalle centramos el contenido del slide */
+.detail-gallery .slide-layer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Aquí cambiamos el fit: ahora se ve el frame completo, sin tanto zoom */
+.detail-gallery .slide-layer img,
+.detail-gallery .slide-layer video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;       /* <- clave para quitar el zoom */
+  background-color: #050509; /* barras laterales del mismo tono que el fondo */
+}
+
+
 /* ---------- PROJECT DETAIL ---------- */
 
 .detail-summary {
