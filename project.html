@@ -1,271 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Project – Engineering Portfolio</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Project – Esteban Caicedo</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- model-viewer (para los .glb de "model") -->
+  <script type="module"
+    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
 </head>
 <body>
   <div class="container">
-    <!-- HEADER / NAV -->
+    <!-- NAV SUPERIOR -->
     <header class="nav">
       <div class="nav-left">
-        <!-- Título y resumen del proyecto (rellenos por JS) -->
-        <h1 id="title" class="site-title site-title--small"></h1>
-        <p id="summary" class="detail-summary"></p>
+        <a href="index.html" class="back-link">← Home</a>
+        <span class="chip" style="margin-top:4px;">Projects</span>
+
+        <h1 id="project-title" class="site-title site-title--small">
+          Project title
+        </h1>
+
+        <p id="project-tagline" class="detail-summary">
+          Project short description.
+        </p>
       </div>
 
-     <nav class="nav-links">
-  <a href="index.html">Home</a>
-  <a href="projects.html">Projects</a>
-  <a href="about.html">About me</a>
-  <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/" target="_blank" rel="noreferrer">
-    LinkedIn
-  </a>
-</nav>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="about.html">About me</a>
+        <a href="https://www.linkedin.com/in/esteban-caicedo-945bb1300/"
+           target="_blank"
+           rel="noreferrer">
+          LinkedIn
+        </a>
+      </nav>
     </header>
 
     <!-- CUERPO DEL PROYECTO -->
-    <main>
-      <section class="detail">
-        <!-- 3D viewer -->
-        <section class="viewer" id="viewer" aria-label="3D model viewer">
-          <!-- Aquí el JS monta el model-viewer o mensaje de fallback -->
-        </section>
+    <main class="detail">
+      <!-- Columna izquierda: viewer 3D / media principal -->
+      <section class="detail-media">
+        <div id="viewer" class="viewer">
+          <p class="viewer-empty">Loading 3D model…</p>
+        </div>
+      </section>
 
-        <!-- Galería de imágenes / videos -->
-        <section class="detail-media">
-          <div id="gallery"
-               class="slider detail-gallery"
-               aria-label="Project media gallery">
-          </div>
-        </section>
+      <!-- Columna derecha: galería de imágenes / videos -->
+      <section>
+        <div id="detail-gallery" class="detail-gallery slider">
+          <div class="slider-empty-msg">Loading gallery…</div>
+        </div>
       </section>
     </main>
   </div>
 
-  <!-- LIGHTBOX para ver imágenes/videos en grande -->
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <div class="lightbox-backdrop"></div>
-    <div class="lightbox-inner">
-      <button class="lightbox-close" aria-label="Close">×</button>
-      <div class="lightbox-content"></div>
-    </div>
-  </div>
-
   <script>
-  // ====== utils ======
-  const isVideo=(src)=>/\\.(mp4|webm|ogg)$/i.test(src);
+    // ========= UTILIDADES =========
+    const isVideo = (src) => /\.(mp4|webm|ogg)$/i.test(src || "");
 
-  function makeMediaEl(src){
-    if(isVideo(src)){
-      const v=document.createElement('video');
-      v.src=src;
-      v.muted=true;
-      v.loop=true;
-      v.autoplay=true;
-      v.playsInline=true;
-      v.preload='metadata';
-      v.setAttribute('disablepictureinpicture','');
+    function makeMediaEl(src) {
+      if (!src) {
+        const ph = document.createElement("div");
+        ph.className = "slider-empty-msg";
+        ph.textContent = "No media";
+        return ph;
+      }
 
-      // Controles al pasar el mouse
-      v.addEventListener('mouseenter', ()=>{
-        v.controls = true;
-        v.muted = false;
-      });
-      v.addEventListener('mouseleave', ()=>{
-        v.controls = false;
+      if (isVideo(src)) {
+        const v = document.createElement("video");
+        v.src = src;
         v.muted = true;
-      });
-
-      return v;
-    }
-    const img=new Image();
-    img.src=src;
-    img.alt='';
-    img.loading='lazy';
-    return img;
-  }
-
-  // ====== Lightbox ======
-  function openLightbox(src) {
-    const lb = document.getElementById('lightbox');
-    const content = lb.querySelector('.lightbox-content');
-    content.innerHTML = '';
-
-    if (isVideo(src)) {
-      const v = document.createElement('video');
-      v.src = src;
-      v.controls = true;
-      v.autoplay = true;
-      v.style.width = '100%';
-      v.style.maxHeight = '80vh';
-      v.style.objectFit = 'contain';
-      content.appendChild(v);
-    } else {
-      const img = new Image();
-      img.src = src;
-      img.alt = '';
-      img.style.width = '100%';
-      img.style.maxHeight = '80vh';
-      img.style.objectFit = 'contain';
-      content.appendChild(img);
-    }
-
-    lb.classList.add('open');
-    lb.setAttribute('aria-hidden','false');
-  }
-
-  function closeLightbox() {
-    const lb = document.getElementById('lightbox');
-    lb.classList.remove('open');
-    lb.setAttribute('aria-hidden','true');
-    const content = lb.querySelector('.lightbox-content');
-    content.innerHTML = '';
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const lb = document.getElementById('lightbox');
-    const closeBtn = lb.querySelector('.lightbox-close');
-    const backdrop = lb.querySelector('.lightbox-backdrop');
-
-    closeBtn.addEventListener('click', closeLightbox);
-    backdrop.addEventListener('click', closeLightbox);
-
-    document.addEventListener('keydown', (e)=>{
-      if (e.key === 'Escape') closeLightbox();
-    });
-  });
-
-  // ====== Slider con soporte para lightbox ======
-  function mountMediaSlider(container, mediaPaths, heightPx, opts){
-    opts=opts||{};
-    const autoplay=opts.autoplay!==false;
-    const interval=opts.interval||3000;
-    container.classList.add('slider');
-    if(heightPx) container.style.height=heightPx+'px';
-
-    if (!mediaPaths || !mediaPaths.length) {
-      container.classList.add('slider--empty');
-      container.innerHTML = '<div class="slider-empty-msg">No media for this project.</div>';
-      return;
-    }
-
-    const a=document.createElement('div');a.className='slide-layer active';
-    const b=document.createElement('div');b.className='slide-layer';
-    let useA=true, idx=0, timer=null;
-
-    a.appendChild(makeMediaEl(mediaPaths[0]||'')); 
-    b.appendChild(makeMediaEl(mediaPaths[1]||mediaPaths[0]||''));
-    container.append(a,b);
-
-    const left=document.createElement('div'); left.className='ctrl left'; left.textContent='‹';
-    const right=document.createElement('div'); right.className='ctrl right'; right.textContent='›';
-    container.append(left,right);
-
-    let dots=null;
-    if(mediaPaths.length>1){
-      dots=document.createElement('div');dots.className='dots';
-      mediaPaths.forEach((_,i)=>{
-        const d=document.createElement('span');
-        d.className='dot'+(i===0?' active':'');
-        d.onclick=()=>show(i);
-        dots.appendChild(d);
-      });
-      container.appendChild(dots);
-    }
-
-    function show(nextIndex){
-      idx=(nextIndex+mediaPaths.length)%mediaPaths.length;
-      const target=(useA?b:a);
-      target.innerHTML='';
-      target.appendChild(makeMediaEl(mediaPaths[idx]||''));
-      (useA?a:b).classList.remove('active');
-      (useA?b:a).classList.add('active');
-      useA=!useA;
-      if(dots){
-        dots.childNodes.forEach((d,i)=>d.className='dot'+(i===idx?' active':''));
+        v.loop = true;
+        v.autoplay = true;
+        v.playsInline = true;
+        v.preload = "metadata";
+        v.setAttribute("disablepictureinpicture", "");
+        return v;
+      } else {
+        const img = new Image();
+        img.src = src;
+        img.alt = "";
+        img.loading = "lazy";
+        return img;
       }
     }
 
-    left.onclick=()=>show(idx-1);
-    right.onclick=()=>show(idx+1);
+    function mountMediaSlider(container, mediaPaths, opts) {
+      opts = opts || {};
+      const autoplay = opts.autoplay !== false;
+      const interval = opts.interval || 3000;
 
-    function start(){
-      if(autoplay && mediaPaths.length>1) timer=setInterval(()=>show(idx+1), interval);
+      container.innerHTML = "";
+      container.classList.add("slider");
+
+      if (!mediaPaths || !mediaPaths.length) {
+        container.classList.add("slider--empty");
+        container.innerHTML =
+          '<div class="slider-empty-msg">No media available</div>';
+        return;
+      }
+
+      const a = document.createElement("div");
+      const b = document.createElement("div");
+      a.className = "slide-layer active";
+      b.className = "slide-layer";
+
+      let useA = true;
+      let idx = 0;
+      let timer = null;
+
+      a.appendChild(makeMediaEl(mediaPaths[0]));
+      b.appendChild(makeMediaEl(mediaPaths[1] || mediaPaths[0]));
+      container.append(a, b);
+
+      // Controles
+      const left = document.createElement("div");
+      const right = document.createElement("div");
+      left.className = "ctrl left";
+      right.className = "ctrl right";
+      left.textContent = "‹";
+      right.textContent = "›";
+      container.append(left, right);
+
+      // Dots
+      let dots = null;
+      if (mediaPaths.length > 1) {
+        dots = document.createElement("div");
+        dots.className = "dots";
+        mediaPaths.forEach((_, i) => {
+          const d = document.createElement("span");
+          d.className = "dot" + (i === 0 ? " active" : "");
+          d.onclick = () => show(i);
+          dots.appendChild(d);
+        });
+        container.appendChild(dots);
+      }
+
+      function show(nextIndex) {
+        idx = (nextIndex + mediaPaths.length) % mediaPaths.length;
+        const target = useA ? b : a;
+        target.innerHTML = "";
+        target.appendChild(makeMediaEl(mediaPaths[idx]));
+        (useA ? a : b).classList.remove("active");
+        (useA ? b : a).classList.add("active");
+        useA = !useA;
+
+        if (dots) {
+          Array.from(dots.children).forEach((d, i) => {
+            d.className = "dot" + (i === idx ? " active" : "");
+          });
+        }
+      }
+
+      left.onclick = () => show(idx - 1);
+      right.onclick = () => show(idx + 1);
+
+      function start() {
+        if (autoplay && mediaPaths.length > 1) {
+          timer = setInterval(() => show(idx + 1), interval);
+        }
+      }
+
+      function stop() {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      }
+
+      container.addEventListener("mouseenter", stop);
+      container.addEventListener("mouseleave", start);
+      start();
     }
-    function stop(){
-      if(timer){clearInterval(timer); timer=null;}
+
+    // ========= CARGA DEL PROYECTO (ADAPTADO A TU JSON) =========
+    async function loadProjectDetail() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("slug");
+
+      if (!slug) {
+        console.error("No slug in URL");
+        return;
+      }
+
+      try {
+        const res = await fetch("projects.json", { cache: "no-store" });
+        const projects = await res.json();
+        const project = projects.find((p) => p.slug === slug);
+
+        if (!project) {
+          console.error("Project not found for slug:", slug);
+          return;
+        }
+
+        // Título y descripción
+        document.getElementById("project-title").textContent = project.title;
+        document.getElementById("project-tagline").textContent =
+          project.description || "";
+
+        // Viewer 3D / media principal
+        const viewer = document.getElementById("viewer");
+        viewer.innerHTML = "";
+
+        // Aquí usamos "model" (como en tu JSON)
+        if (project.model) {
+          const mv = document.createElement("model-viewer");
+          mv.src = project.model;
+          mv.setAttribute("camera-controls", "");
+          mv.setAttribute("touch-action", "pan-y");
+          mv.setAttribute("shadow-intensity", "0.6");
+          mv.setAttribute("exposure", "0.9");
+          mv.setAttribute("auto-rotate", "");
+          viewer.appendChild(mv);
+        } else if (project.images && project.images.length) {
+          viewer.appendChild(makeMediaEl(project.images[0]));
+        } else if (project.videos && project.videos.length) {
+          viewer.appendChild(makeMediaEl(project.videos[0]));
+        } else {
+          const p = document.createElement("p");
+          p.className = "viewer-empty";
+          p.textContent = "No 3D model or media available.";
+          viewer.appendChild(p);
+        }
+
+        // Galería derecha: todas las imágenes + videos
+        const galleryEl = document.getElementById("detail-gallery");
+        const media = [
+          ...(project.images || []),
+          ...(project.videos || []),
+        ];
+        mountMediaSlider(galleryEl, media, { autoplay: true, interval: 3500 });
+      } catch (err) {
+        console.error("Error loading project detail:", err);
+      }
     }
-    container.addEventListener('mouseenter',stop);
-    container.addEventListener('mouseleave',start);
-    start();
 
-    // click en la imagen/video → lightbox
-    container.addEventListener('click', (e)=>{
-      if (e.target.classList.contains('ctrl') || e.target.classList.contains('dot')) return;
-      const currentSrc = mediaPaths[idx];
-      if (!currentSrc) return;
-      openLightbox(currentSrc);
-    });
-  }
-
-  // ====== 3D viewer ======
-  function mountModel(container, src) {
-    if (!src) {
-      container.innerHTML='<div class="viewer-empty">No 3D model for this project.</div>';
-      return;
-    }
-
-    const tag = document.createElement('model-viewer');
-    tag.setAttribute('src', src);
-    tag.setAttribute('camera-controls','');
-    tag.setAttribute('auto-rotate','');
-    tag.setAttribute('exposure','1.0');
-    tag.setAttribute('shadow-intensity','0.7');
-    tag.style.width='100%';
-    tag.style.height='100%';
-    tag.addEventListener('error', ()=>{
-      container.innerHTML='<div class="viewer-empty">Model preview not available.</div>';
-    });
-    container.innerHTML='';
-    container.appendChild(tag);
-
-    if (!customElements.get('model-viewer')) {
-      const s=document.createElement('script');
-      s.type='module';
-      s.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
-      document.head.appendChild(s);
-    }
-  }
-
-  // ====== load & render ======
-  (async function(){
-    const params=new URLSearchParams(location.search);
-    const slug=params.get('slug');
-
-    const res=await fetch('projects.json',{cache:'no-store'});
-    const list=await res.json();
-    const p=list.find(x=>x.slug===slug) || list[0];
-
-    document.title = (p.title ? p.title + ' – Engineering Portfolio' : 'Project – Engineering Portfolio');
-    document.getElementById('title').textContent = p.title || 'Project';
-
-    const summaryText = p.description || p.longDescription || '';
-    document.getElementById('summary').textContent = summaryText;
-
-    // viewer
-    const viewerEl = document.getElementById('viewer');
-    mountModel(viewerEl, p.model || '');
-
-    // gallery
-    const media=[...(p.images||[]), ...(p.videos||[])];
-    const galleryEl = document.getElementById('gallery');
-    mountMediaSlider(galleryEl, media, 520, {autoplay:true});
-  })();
+    document.addEventListener("DOMContentLoaded", loadProjectDetail);
   </script>
 </body>
 </html>
-
-}
